@@ -20,7 +20,7 @@ public class RSColumn extends RSViewGroup
             if (view.getWeightParams() != null
                     && view.getWeightParams().getWeight() != null)
             {
-                view.setW(0);
+                view.setH(0);
             }
 
             topGuide += view.getMarginTop();
@@ -32,6 +32,7 @@ public class RSColumn extends RSViewGroup
                             .end(paddingEnd + view.getMarginEnd())
                             .build()
             );
+
             topGuide += view.getH();
             topGuide += view.getMarginBottom();
         }

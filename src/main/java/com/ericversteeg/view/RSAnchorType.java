@@ -11,6 +11,6 @@ public enum RSAnchorType
     TOP_CENTER,
     TOP_RIGHT,
     BOTTOM_LEFT,
-    BOTTOM_RIGHT,
-    LEFT_CENTER
+    BOTTOM_CENTER,
+    BOTTOM_RIGHT
 }

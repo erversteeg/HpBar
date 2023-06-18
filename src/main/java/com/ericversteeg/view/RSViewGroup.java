@@ -1,10 +1,8 @@
 package com.ericversteeg.view;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public abstract class RSViewGroup extends RSView
 {
@@ -25,6 +23,8 @@ public abstract class RSViewGroup extends RSView
 
     protected List<RSView> subviews = new ArrayList<>();
 
+    private boolean renderReverse = false;
+
     public RSViewGroup(int x, int y, int w, int h)
     {
         super(x, y, w, h);
@@ -41,10 +41,20 @@ public abstract class RSViewGroup extends RSView
         view.setParent(this);
     }
 
+    public void setRenderReverse(boolean renderReverse)
+    {
+        this.renderReverse = renderReverse;
+    }
+
     @Override
     public void render(Graphics2D graphics, Point origin)
     {
         super.render(graphics, origin);
+
+        if (renderReverse)
+        {
+            Collections.reverse(subviews);
+        }
 
         for (RSView view: subviews)
         {
