@@ -68,6 +68,11 @@ public class RSViewOverlay extends Overlay
         return new Dimension(0, 0);
     }
 
+    public List<ViewInfo> getViewInfo()
+    {
+        return viewInfo;
+    }
+
     public void addViewInfo(ViewInfo viewInfo) {
         this.viewInfo.add(viewInfo);
     }

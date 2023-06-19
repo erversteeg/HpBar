@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class RSTextView extends RSView
 {
-    private TextComponent textComponent = new TextComponent();
+    private TextComponentWOpacity textComponent = new TextComponentWOpacity();
     private FontMetrics fontMetrics;
     private Font font;
     private String text = "";
@@ -454,11 +454,11 @@ public class RSTextView extends RSView
             }
 
             Color animatedColor = getInterpolatedColor(getColorPair(colors, percent), colors.length, percent);
-            textComponent.setColor(animatedColor);
+            textComponent.setColor(colorWithOpacity(animatedColor));
         }
         else
         {
-            textComponent.setColor(color);
+            textComponent.setColor(colorWithOpacity(color));
         }
     }
 

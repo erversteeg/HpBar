@@ -84,6 +84,11 @@ public class RSView implements RSRenderable
     protected Color bgColor = new Color(0, 0, 0, 0);
     protected RSViewBorder border;
 
+    protected float opacity = 1f;
+
+    private RSAnimation animation;
+    private boolean isAnimating = false;
+
     protected RSViewGroup parent = null;
 
     public RSView(int x, int y, int w, int h)
@@ -211,6 +216,26 @@ public class RSView implements RSRenderable
         this.marginBottom = marginBottom;
     }
 
+    public void setOpacity(float opacity)
+    {
+        this.opacity = opacity;
+    }
+
+    public float getOpacity()
+    {
+        return opacity;
+    }
+
+    public void setAnimating(boolean animating)
+    {
+        isAnimating = animating;
+
+        if (!isAnimating)
+        {
+            animation = null;
+        }
+    }
+
     public RSView getParent()
     {
         return parent;
@@ -316,12 +341,30 @@ public class RSView implements RSRenderable
     @Override
     public void render(Graphics2D graphics, Point origin)
     {
-        graphics.setColor(bgColor);
+        if (animation != null && isAnimating)
+        {
+            animation.render();
+        }
+
+        graphics.setColor(colorWithOpacity(bgColor));
         graphics.fillRect(origin.x + x, origin.y + y, w, h);
 
         if (border != null)
         {
             border.render(graphics, origin);
         }
+    }
+
+    protected Color colorWithOpacity(Color color)
+    {
+        return new Color(color.getRed() / 255f, color.getGreen() / 255f,
+                color.getBlue() / 255f, (opacity * color.getAlpha()) / 255f);
+    }
+
+    public RSAnimation animate()
+    {
+        RSAnimation animation = new RSAnimation(this);
+        this.animation = animation;
+        return animation;
     }
 }

@@ -51,13 +51,16 @@ public abstract class RSViewGroup extends RSView
     {
         super.render(graphics, origin);
 
+        List<RSView> subviewsCopy = new LinkedList<>(subviews);
+
         if (renderReverse)
         {
-            Collections.reverse(subviews);
+            Collections.reverse(subviewsCopy);
         }
 
-        for (RSView view: subviews)
+        for (RSView view: subviewsCopy)
         {
+            view.setOpacity(getOpacity());
             view.render(graphics, new Point(origin.x + x, origin.y + y));
         }
     }

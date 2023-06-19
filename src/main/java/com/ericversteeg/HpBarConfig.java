@@ -100,4 +100,20 @@ public interface HpBarConfig extends Config
             description = "Configures whether or not to show small text."
     )
     default boolean hasSecondaryText() { return true; }
+
+    @ConfigItem(
+            position = 9,
+            keyName = "alwaysVisible",
+            name = "Always Visible",
+            description = "Configures whether or not bars are always visible."
+    )
+    default boolean isAlwaysVisible() { return true; }
+
+    @ConfigItem(
+            position = 9,
+            keyName = "showRun",
+            name = "Show Run Bar",
+            description = "Configures whether or not to show run bar when running."
+    )
+    default boolean isShowRunBar() { return true; }
 }

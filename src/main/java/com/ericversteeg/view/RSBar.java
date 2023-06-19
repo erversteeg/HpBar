@@ -53,8 +53,6 @@ public class RSBar extends RSView {
         topColorInner = hueColor(topColorInner, hue);
         darkColor = hueColor(darkColor, hue);
         bottomColor = hueColor(bottomColor, hue);
-
-        colors = new Color [] {topColorOuter, topColorInner, topColorOuter, darkColor, bottomColor};
     }
 
     @Override
@@ -63,7 +61,15 @@ public class RSBar extends RSView {
 
         if (maxValue == 0) return;
 
-        graphics.setPaint(new Color(0, 0, 0, 156));
+        colors = new Color [] {
+                colorWithOpacity(topColorOuter),
+                colorWithOpacity(topColorInner),
+                colorWithOpacity(topColorOuter),
+                colorWithOpacity(darkColor),
+                colorWithOpacity(bottomColor)
+        };
+
+        graphics.setPaint(colorWithOpacity(new Color(0, 0, 0, 156)));
 
         graphics.fillRect(origin.x + x, origin.y + y, w, h);
 
