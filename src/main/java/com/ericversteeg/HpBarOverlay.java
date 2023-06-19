@@ -157,7 +157,7 @@ class HpBarOverlay extends RSViewOverlay {
 		column.setRenderReverse(true);
 
 		column.animate()
-				.duration(0.3f)
+				.duration(0.15f)
 				.fadeIn()
 				.start();
 
@@ -227,6 +227,8 @@ class HpBarOverlay extends RSViewOverlay {
 		}
 	}
 
+	private boolean isFadeOut = false;
+
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
@@ -245,11 +247,19 @@ class HpBarOverlay extends RSViewOverlay {
 			}
 			else
 			{
-				column.animate()
-						.fadeOut()
-						.duration(0.3f)
-						.onComplete(this::clearViewInfo)
-						.start();
+				if (!isFadeOut)
+				{
+					column.animate()
+							.fadeOut()
+							.duration(0.3f)
+							.onComplete(() -> {
+								clearViewInfo();
+								isFadeOut = false;
+							})
+							.start();
+
+					isFadeOut = true;
+				}
 			}
 		}
 

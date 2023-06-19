@@ -62,6 +62,7 @@ public class RSAnimation
                 break;
             case FADE_OUT:
                 view.setOpacity(1 - t);
+                break;
         }
 
         if (t >= 1f)
