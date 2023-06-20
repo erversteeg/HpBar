@@ -76,7 +76,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 		column = new RSColumn(0,0, width, RSView.WRAP_CONTENT);
 
-		if (plugin.isRun() && !plugin.isCombat())
+		if (plugin.isRun() && !plugin.isActive())
 		{
 			types = new ArrayList<>();
 			types.add(BarType.RUN_ENERGY);
@@ -157,7 +157,7 @@ class HpBarOverlay extends RSViewOverlay {
 		column.setRenderReverse(true);
 
 		column.animate()
-				.duration(0.15f)
+				.duration(0.1f)
 				.fadeIn()
 				.start();
 
@@ -177,22 +177,26 @@ class HpBarOverlay extends RSViewOverlay {
 				if (i == 0)
 				{
 					secondaryBar.setValue(info.value);
+					secondaryBar.setHue(info.hue);
 					secondaryTextView.setText(String.valueOf(secondaryBar.getValue()));
 				}
 				else if (i == 1)
 				{
 					tertiaryBar.setValue(info.value);
+					tertiaryBar.setHue(info.hue);
 					tertiaryTextView.setText(String.valueOf(tertiaryBar.getValue()));
 				}
 				else if (i == 2)
 				{
 					quaternaryBar.setValue(info.value);
+					quaternaryBar.setHue(info.hue);
 					quaternaryTextView.setText(String.valueOf(quaternaryBar.getValue()));
 				}
 			}
 			else
 			{
 				primaryBar.setValue(info.value);
+				primaryBar.setHue(info.hue);
 				primaryTextView.setText(String.valueOf(primaryBar.getValue()));
 			}
 		}
@@ -234,14 +238,14 @@ class HpBarOverlay extends RSViewOverlay {
 	{
 		if (getViewInfo().isEmpty())
 		{
-			if (config.isAlwaysVisible() || plugin.isCombat() || plugin.isRun())
+			if (isVisible())
 			{
 				setupViews();
 			}
 		}
 		else
 		{
-			if (config.isAlwaysVisible() || plugin.isCombat() || plugin.isRun())
+			if (isVisible())
 			{
 				updateViews();
 			}
@@ -251,7 +255,7 @@ class HpBarOverlay extends RSViewOverlay {
 				{
 					column.animate()
 							.fadeOut()
-							.duration(0.3f)
+							.duration(0.10f)
 							.onComplete(() -> {
 								clearViewInfo();
 								isFadeOut = false;
@@ -299,5 +303,18 @@ class HpBarOverlay extends RSViewOverlay {
 		}
 
 		return barTypes;
+	}
+
+	boolean hasBarType(BarType barType) {
+		for (BarType type: types()) {
+			if (barType == type) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isVisible() {
+		return config.isAlwaysVisible() || plugin.isActive() || (plugin.isRun() && config.showRunBar());
 	}
 }

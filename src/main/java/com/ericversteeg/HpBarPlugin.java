@@ -12,8 +12,10 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.RSTimeUnit;
 
 import javax.inject.Inject;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -32,11 +34,20 @@ public class HpBarPlugin extends Plugin
 	@Inject private ConfigManager configManager;
 	@Inject private Gson gson;
 
-	private long lastSkillChange = 0L;
+	private long lastHpChange = 0L;
 	private int lastHp = -1;
+
+	private long lastPrayerChange = 0L;
+	private int lastPrayer = -1;
+	private boolean fromActivePrayer = false;
 
 	private long lastRunChange = 0L;
 	private int lastRun = -1;
+
+	private long lastAttackChange = 0L;
+	private int lastAttack = -1;
+
+	boolean isStaminaActive = false;
 
 	private HashSet<Skill> initSkills = new HashSet<>();
 
@@ -59,9 +70,12 @@ public class HpBarPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onConfigChanged(ConfigChanged config)
+	public void onConfigChanged(ConfigChanged configChanged)
 	{
-
+		if (overlay.isVisible()) {
+			overlay.clearViewInfo();
+			overlay.setupViews();
+		}
 	}
 
 	@Subscribe
@@ -69,57 +83,115 @@ public class HpBarPlugin extends Plugin
 	{
 		Skill skill = statChanged.getSkill();
 
-		if (!initSkills.contains(skill))
-		{
-			initSkills.add(skill);
-			return;
-		}
-
-		if (skill.ordinal() == Skill.ATTACK.ordinal()
-				|| skill.ordinal() == Skill.STRENGTH.ordinal()
-				|| skill.ordinal() == Skill.DEFENCE.ordinal()
-				|| skill.ordinal() == Skill.RANGED.ordinal()
-				|| skill.ordinal() == Skill.PRAYER.ordinal()
-				|| skill.ordinal() == Skill.MAGIC.ordinal())
-		{
-			lastSkillChange = Instant.now().toEpochMilli();
-		}
-
 		if (skill.ordinal() == Skill.HITPOINTS.ordinal())
 		{
 			int hp = statChanged.getBoostedLevel();
-			if (hp - lastHp != 0 && hp - lastHp != 1)
+			if (lastHp >= 0 && (hp - lastHp < 0
+					|| hp - lastHp > 1))
 			{
-				lastSkillChange = Instant.now().toEpochMilli();
+				lastHpChange = Instant.now().toEpochMilli();
 			}
 
 			lastHp = hp;
+		}
+		else if (skill.ordinal() == Skill.PRAYER.ordinal())
+		{
+			int prayer = statChanged.getBoostedLevel();
+			if (lastPrayer >= 0)
+			{
+				lastPrayerChange = Instant.now().toEpochMilli();
+				fromActivePrayer = false;
+			}
+
+			lastPrayer = prayer;
 		}
 	}
 
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
+		Prayer [] prayers = Prayer.values();
+		for (Prayer prayer: prayers) {
+			if (client.isPrayerActive(prayer)) {
+				lastPrayerChange = Instant.now().toEpochMilli();
+				fromActivePrayer = true;
+				break;
+			}
+		}
+
 		int run = client.getEnergy() / 100;
-		if (run < lastRun)
+		if (lastRun >= 0 && run - lastRun != 0 && run - lastRun != 1)
 		{
 			lastRunChange = Instant.now().toEpochMilli();
 		}
 		lastRun = run;
+
+		int attack = client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT) / 10;
+		if (lastAttack >= 0 && attack - lastAttack < 0)
+		{
+			lastAttackChange = Instant.now().toEpochMilli();
+		}
+		lastAttack = attack;
+
 	}
 
-	public boolean isCombat()
+	@Subscribe
+	public void onVarbitChanged(VarbitChanged event)
 	{
-		return Instant.now().toEpochMilli() - lastSkillChange < 7000L;
+		// from Timers plugin
+		if (event.getVarbitId() == Varbits.RUN_SLOWED_DEPLETION_ACTIVE
+				|| event.getVarbitId() == Varbits.STAMINA_EFFECT
+				|| event.getVarbitId() == Varbits.RING_OF_ENDURANCE_EFFECT) {
+			int staminaEffectActive = client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE);
+			int staminaPotionEffectVarb = client.getVarbitValue(Varbits.STAMINA_EFFECT);
+			int enduranceRingEffectVarb = client.getVarbitValue(Varbits.RING_OF_ENDURANCE_EFFECT);
+
+			final int totalStaminaEffect = staminaPotionEffectVarb + enduranceRingEffectVarb;
+			if (staminaEffectActive == 1)
+			{
+				isStaminaActive = totalStaminaEffect != 0;
+			}
+		}
+	}
+
+	public boolean isActive()
+	{
+		long lastActive = 0L;
+
+		if (overlay.hasBarType(BarType.HITPOINTS) && lastHpChange > lastActive)
+		{
+			lastActive = lastHpChange;
+		}
+		if (overlay.hasBarType(BarType.PRAYER) && lastPrayerChange > lastActive)
+		{
+			lastActive = lastPrayerChange;
+		}
+		if (overlay.hasBarType(BarType.SPECIAL_ATTACK) && lastAttackChange > lastActive)
+		{
+			lastActive = lastAttackChange;
+		}
+		if (!config.showRunBar())
+		{
+			if (overlay.hasBarType(BarType.RUN_ENERGY) && lastRunChange > lastActive)
+			{
+				lastActive = lastRunChange;
+			}
+		}
+
+		long hideDelay = 3600L;
+		if (lastActive == lastPrayerChange && fromActivePrayer) {
+			hideDelay = 1800L;
+		}
+
+		return Instant.now().toEpochMilli() - lastActive <= hideDelay;
 	}
 
 	public boolean isRun()
 	{
-		return Instant.now().toEpochMilli() - lastRunChange < 3000L
-				&& Instant.now().toEpochMilli() - lastSkillChange > 30000L;
+		return Instant.now().toEpochMilli() - lastRunChange <= 2400L;
 	}
 
-	Map<BarType, BarInfo> barInfo()
+	public Map<BarType, BarInfo> barInfo()
 	{
 		BarInfo hitpoints = new BarInfo(
 				client.getBoostedSkillLevel(Skill.HITPOINTS),
@@ -139,10 +211,16 @@ public class HpBarPlugin extends Plugin
 				180
 		);
 
+		int runHue = 50;
+		if (isStaminaActive)
+		{
+			runHue = 25;
+		}
+
 		BarInfo run = new BarInfo(
 				client.getEnergy() / 100,
 				100,
-				50
+				runHue
 		);
 
 		Map<BarType, BarInfo> barInfo = new HashMap<>();

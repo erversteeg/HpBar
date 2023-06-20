@@ -115,5 +115,5 @@ public interface HpBarConfig extends Config
             name = "Show Run Bar",
             description = "Configures whether or not to show run bar when running."
     )
-    default boolean isShowRunBar() { return true; }
+    default boolean showRunBar() { return true; }
 }
