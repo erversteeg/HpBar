@@ -105,7 +105,7 @@ class HpBarOverlay extends RSViewOverlay {
 				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
 				if (i == types.size() - 2 && config.isLargeSecondary())
 				{
-					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
+					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, secondaryFont);
 					text.setLayoutGravity(RSViewGroup.Gravity.START);
 				}
 
@@ -166,6 +166,9 @@ class HpBarOverlay extends RSViewOverlay {
 		}
 
 		hpColumn.setRenderReverse(true);
+
+		hpColumn.setOpacity(Math.max(20, Math.min(100,
+				config.barOpacity())) / 100f);
 
 		if (animate)
 		{
@@ -249,12 +252,19 @@ class HpBarOverlay extends RSViewOverlay {
 		text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
 
 		container.addView(bar);
-		container.addView(text);
+
+		if (config.hasRunPrimaryText())
+		{
+			container.addView(text);
+		}
 
 		runColumn.addView(container);
 
 		runBar = bar;
 		runTextView = text;
+
+		runColumn.setOpacity(Math.max(20, Math.min(100,
+				config.runBarOpacity())) / 100f);
 
 		if (animate)
 		{

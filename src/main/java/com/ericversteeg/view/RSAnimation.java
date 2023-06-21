@@ -14,6 +14,7 @@ public class RSAnimation
     private Type type;
     private float duration;
     private long start;
+    private float startOpacity;
     private OnComplete onComplete;
 
     public RSAnimation(RSView view)
@@ -42,6 +43,7 @@ public class RSAnimation
     public RSAnimation start()
     {
         this.start = Instant.now().toEpochMilli();
+        this.startOpacity = view.opacity;
         this.view.setAnimating(true);
         return this;
     }
@@ -58,10 +60,10 @@ public class RSAnimation
         switch (type)
         {
             case FADE_IN:
-                view.setOpacity(t);
+                view.setOpacity(t * startOpacity);
                 break;
             case FADE_OUT:
-                view.setOpacity(1 - t);
+                view.setOpacity((1 - t) * startOpacity);
                 break;
         }
 
