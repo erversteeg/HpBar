@@ -20,8 +20,8 @@ import java.time.Instant;
 import java.util.*;
 
 @PluginDescriptor(
-	name = "Hp Bar",
-	description = "Hp bar."
+	name = "Frost HP",
+	description = "A basic health bar overlay."
 )
 
 public class HpBarPlugin extends Plugin
@@ -74,7 +74,7 @@ public class HpBarPlugin extends Plugin
 	{
 		if (overlay.isVisible()) {
 			overlay.clearViewInfo();
-			overlay.setupViews();
+			overlay.setupViews(false);
 		}
 	}
 
@@ -156,6 +156,18 @@ public class HpBarPlugin extends Plugin
 
 	public boolean isActive()
 	{
+		long lastActive = getLastActive();
+
+		long hideDelay = 3600L;
+		if (lastActive == lastPrayerChange && fromActivePrayer) {
+			hideDelay = 1800L;
+		}
+
+		return Instant.now().toEpochMilli() - lastActive <= hideDelay;
+	}
+
+	public long getLastActive()
+	{
 		long lastActive = 0L;
 
 		if (overlay.hasBarType(BarType.HITPOINTS) && lastHpChange > lastActive)
@@ -177,13 +189,7 @@ public class HpBarPlugin extends Plugin
 				lastActive = lastRunChange;
 			}
 		}
-
-		long hideDelay = 3600L;
-		if (lastActive == lastPrayerChange && fromActivePrayer) {
-			hideDelay = 1800L;
-		}
-
-		return Instant.now().toEpochMilli() - lastActive <= hideDelay;
+		return lastActive;
 	}
 
 	public boolean isRun()

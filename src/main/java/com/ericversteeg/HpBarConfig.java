@@ -13,6 +13,70 @@ public interface HpBarConfig extends Config
 
     @ConfigItem(
             position = 0,
+            keyName = "primaryBar",
+            name = "Primary",
+            description = "Configures what the primary bar is."
+    )
+    default BarType primaryBarType() { return BarType.HITPOINTS; }
+
+    @ConfigItem(
+            position = 1,
+            keyName = "secondaryBar",
+            name = "Secondary",
+            description = "Configures what the secondary bar is."
+    )
+    default BarType secondaryBarType() { return BarType.PRAYER; }
+
+    @ConfigItem(
+            position = 2,
+            keyName = "tertiaryBar",
+            name = "Tertiary",
+            description = "Configures what the tertiary bar is."
+    )
+    default BarType tertiaryBarType() { return BarType.SPECIAL_ATTACK; }
+
+    @ConfigItem(
+            position = 3,
+            keyName = "quaternaryBar",
+            name = "Quaternary",
+            description = "Configures what the quaternary bar is."
+    )
+    default BarType quaternaryBarType() { return BarType.RUN_ENERGY; }
+
+    @ConfigItem(
+            position = 4,
+            keyName = "largeSecondary",
+            name = "Larger Secondary",
+            description = "Configures whether or not the secondary bar is larger."
+    )
+    default boolean isLargeSecondary() { return false; }
+
+    @ConfigItem(
+            position = 4,
+            keyName = "secondaryText",
+            name = "Secondary Text",
+            description = "Configures whether or not to show secondary text."
+    )
+    default boolean hasSecondaryText() { return true; }
+
+    @ConfigItem(
+            position = 5,
+            keyName = "alwaysVisible",
+            name = "Always On",
+            description = "Configures whether or not bars are always on."
+    )
+    default boolean isAlwaysVisible() { return true; }
+
+    @ConfigItem(
+            position = 6,
+            keyName = "showRun",
+            name = "Show Run Bar Separately",
+            description = "Configures whether or not to show run bar separately when running."
+    )
+    default boolean showRunBar() { return true; }
+
+    @ConfigItem(
+            position = 7,
             keyName = "anchorType",
             name = "Anchor",
             description = "Configures anchor."
@@ -22,27 +86,27 @@ public interface HpBarConfig extends Config
     }
 
     @ConfigItem(
-            position = 1,
+            position = 8,
             keyName = "anchorX",
-            name = "X",
-            description = "Configure x position."
+            name = "Offset X",
+            description = "Configure x offset."
     )
     default int anchorX() {
         return 0;
     }
 
     @ConfigItem(
-            position = 2,
+            position = 9,
             keyName = "anchorY",
-            name = "Y",
-            description = "Configures y position."
+            name = "Offset Y",
+            description = "Configures y offset."
     )
     default int anchorY() {
         return 0;
     }
 
     @ConfigItem(
-            position = 3,
+            position = 10,
             keyName = "width",
             name = "Width",
             description = "Configures the width."
@@ -52,7 +116,7 @@ public interface HpBarConfig extends Config
     }
 
     @ConfigItem(
-            position = 3,
+            position = 11,
             keyName = "height",
             name = "Height",
             description = "Configures the height."
@@ -60,60 +124,4 @@ public interface HpBarConfig extends Config
     default int height() {
         return 30;
     }
-
-    @ConfigItem(
-            position = 4,
-            keyName = "primaryBar",
-            name = "Primary",
-            description = "Configures what the primary bar is."
-    )
-    default BarType primaryBarType() { return BarType.HITPOINTS; }
-
-    @ConfigItem(
-            position = 5,
-            keyName = "secondaryBar",
-            name = "Secondary",
-            description = "Configures what the secondary bar is."
-    )
-    default BarType secondaryBarType() { return BarType.PRAYER; }
-
-    @ConfigItem(
-            position = 6,
-            keyName = "tertiaryBar",
-            name = "Tertiary",
-            description = "Configures what the tertiary bar is."
-    )
-    default BarType tertiaryBarType() { return BarType.SPECIAL_ATTACK; }
-
-    @ConfigItem(
-            position = 7,
-            keyName = "quaternaryBar",
-            name = "Quaternary",
-            description = "Configures what the quaternary bar is."
-    )
-    default BarType quaternaryBarType() { return BarType.RUN_ENERGY; }
-
-    @ConfigItem(
-            position = 8,
-            keyName = "secondaryText",
-            name = "Small Text",
-            description = "Configures whether or not to show small text."
-    )
-    default boolean hasSecondaryText() { return true; }
-
-    @ConfigItem(
-            position = 9,
-            keyName = "alwaysVisible",
-            name = "Always Visible",
-            description = "Configures whether or not bars are always visible."
-    )
-    default boolean isAlwaysVisible() { return true; }
-
-    @ConfigItem(
-            position = 9,
-            keyName = "showRun",
-            name = "Show Run Bar",
-            description = "Configures whether or not to show run bar when running."
-    )
-    default boolean showRunBar() { return true; }
 }

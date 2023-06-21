@@ -23,6 +23,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 	private Font primaryFont;
 	private Font secondaryFont;
+	private Font smallFont;
 
 	List<BarType> types;
 
@@ -59,7 +60,7 @@ class HpBarOverlay extends RSViewOverlay {
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
-	void setupViews()
+	void setupViews(boolean animate)
 	{
 		clearViewInfo();
 
@@ -95,12 +96,22 @@ class HpBarOverlay extends RSViewOverlay {
 			if (i < types.size() - 1)
 			{
 				RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 4);
+				if (i == types.size() - 2 && config.isLargeSecondary())
+				{
+					container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 2);
+				}
 
 				RSBar bar = new RSBar(RSView.MATCH_PARENT, RSView.MATCH_PARENT, info.maxValue);
 				bar.setHue(info.hue);
 				bar.setValue(info.value);
 
-				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, secondaryFont);
+				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
+				if (i == types.size() - 2 && config.isLargeSecondary())
+				{
+					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
+					text.setLayoutGravity(RSViewGroup.Gravity.START);
+				}
+
 				text.setText(String.valueOf(bar.getValue()));
 				text.setMarginStart(1);
 				text.setMarginTop(-1);
@@ -114,17 +125,17 @@ class HpBarOverlay extends RSViewOverlay {
 
 				column.addView(container);
 
-				if (i == 0)
+				if (i == types.size() - 2)
 				{
 					secondaryBar = bar;
 					secondaryTextView = text;
 				}
-				else if (i == 1)
+				else if (i == types.size() - 3)
 				{
 					tertiaryBar = bar;
 					tertiaryTextView = text;
 				}
-				else if (i == 2)
+				else if (i == types.size() - 4)
 				{
 					quaternaryBar = bar;
 					quaternaryTextView = text;
@@ -156,10 +167,13 @@ class HpBarOverlay extends RSViewOverlay {
 
 		column.setRenderReverse(true);
 
-		column.animate()
-				.duration(0.1f)
-				.fadeIn()
-				.start();
+		if (animate)
+		{
+			column.animate()
+					.duration(0.1f)
+					.fadeIn()
+					.start();
+		}
 
 		addViewInfo(new ViewInfo(client, column, config.anchorType(), config.anchorX(), config.anchorY()));
 	}
@@ -174,19 +188,19 @@ class HpBarOverlay extends RSViewOverlay {
 
 			if (i < types.size() - 1)
 			{
-				if (i == 0)
+				if (i == types.size() - 2)
 				{
 					secondaryBar.setValue(info.value);
 					secondaryBar.setHue(info.hue);
 					secondaryTextView.setText(String.valueOf(secondaryBar.getValue()));
 				}
-				else if (i == 1)
+				else if (i == types.size() - 3)
 				{
 					tertiaryBar.setValue(info.value);
 					tertiaryBar.setHue(info.hue);
 					tertiaryTextView.setText(String.valueOf(tertiaryBar.getValue()));
 				}
-				else if (i == 2)
+				else if (i == types.size() - 4)
 				{
 					quaternaryBar.setValue(info.value);
 					quaternaryBar.setHue(info.hue);
@@ -221,13 +235,26 @@ class HpBarOverlay extends RSViewOverlay {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 4));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 3));
 			ge.registerFont(font);
 			secondaryFont = font;
 		}
 		catch (Exception e)
 		{
 			secondaryFont = FontManager.getRunescapeSmallFont();
+		}
+
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
+			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 4));
+			ge.registerFont(font);
+			smallFont = font;
+		}
+		catch (Exception e)
+		{
+			smallFont = FontManager.getRunescapeSmallFont();
 		}
 	}
 
@@ -236,11 +263,18 @@ class HpBarOverlay extends RSViewOverlay {
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
+		if (config.isAlwaysVisible())
+		{
+			setupViews(false);
+			return super.render(graphics);
+		}
+
 		if (getViewInfo().isEmpty())
 		{
 			if (isVisible())
 			{
-				setupViews();
+				clearViewInfo();
+				setupViews(true);
 			}
 		}
 		else
