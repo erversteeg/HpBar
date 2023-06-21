@@ -45,70 +45,78 @@ public interface HpBarConfig extends Config
 
     @ConfigItem(
             position = 4,
-            keyName = "largeSecondary",
-            name = "Larger Secondary",
-            description = "Configures whether or not the secondary bar is larger."
+            keyName = "enableHp",
+            name = "Enable HP Bar",
+            description = "Configures whether to enable the hp bar."
     )
-    default boolean isLargeSecondary() { return false; }
-
-    @ConfigItem(
-            position = 4,
-            keyName = "secondaryText",
-            name = "Secondary Text",
-            description = "Configures whether or not to show secondary text."
-    )
-    default boolean hasSecondaryText() { return true; }
+    default boolean showHpBar() { return true; }
 
     @ConfigItem(
             position = 5,
             keyName = "alwaysVisible",
             name = "Always On",
-            description = "Configures whether or not bars are always on."
+            description = "Configures whether or not hp bars are always on."
     )
     default boolean isAlwaysVisible() { return true; }
 
     @ConfigItem(
             position = 6,
-            keyName = "showRun",
-            name = "Show Run Bar Separately",
-            description = "Configures whether or not to show run bar separately when running."
+            keyName = "largeSecondary",
+            name = "Large Secondary",
+            description = "Configures whether or not the secondary bar is large."
     )
-    default boolean showRunBar() { return true; }
+    default boolean isLargeSecondary() { return false; }
 
     @ConfigItem(
             position = 7,
+            keyName = "primaryText",
+            name = "Primary Text",
+            description = "Configures whether or not to show primary text."
+    )
+    default boolean hasPrimaryText() { return true; }
+
+    @ConfigItem(
+            position = 8,
+            keyName = "smallText",
+            name = "Small Text",
+            description = "Configures whether or not to show small text."
+    )
+    default boolean hasSecondaryText() { return true; }
+
+    @ConfigItem(
+            position = 9,
             keyName = "anchorType",
-            name = "Anchor",
-            description = "Configures anchor."
+            name = "Bar Anchor",
+            description = "Configures view anchor."
     )
     default RSAnchorType anchorType() {
         return RSAnchorType.TOP_CENTER;
     }
 
     @ConfigItem(
-            position = 8,
+            position = 10,
             keyName = "anchorX",
-            name = "Offset X",
-            description = "Configure x offset."
+            name = "Bar Offset X",
+            description = "Configures x offset."
     )
     default int anchorX() {
         return 0;
     }
 
     @ConfigItem(
-            position = 9,
+            position = 11,
             keyName = "anchorY",
-            name = "Offset Y",
+            name = "Bar Offset Y",
             description = "Configures y offset."
     )
     default int anchorY() {
-        return 0;
+        return 80;
     }
 
     @ConfigItem(
-            position = 10,
+            position = 12,
             keyName = "width",
-            name = "Width",
+            name = "Bar Width",
             description = "Configures the width."
     )
     default int width() {
@@ -116,12 +124,78 @@ public interface HpBarConfig extends Config
     }
 
     @ConfigItem(
-            position = 11,
+            position = 13,
             keyName = "height",
-            name = "Height",
+            name = "Bar Height",
             description = "Configures the height."
     )
     default int height() {
         return 30;
+    }
+
+    @ConfigItem(
+            position = 14,
+            keyName = "enableRun",
+            name = "Enable Run Bar",
+            description = "Configures whether or not to enable the run bar."
+    )
+    default boolean showRunBar() { return true; }
+
+    @ConfigItem(
+            position = 15,
+            keyName = "runAlwaysVisible",
+            name = "Run Bar Always On",
+            description = "Configures whether or not bars are always on."
+    )
+    default boolean isRunAlwaysVisible() { return true; }
+
+    @ConfigItem(
+            position = 16,
+            keyName = "runAnchorType",
+            name = "Run Bar Anchor",
+            description = "Configures run bar anchor."
+    )
+    default RSAnchorType runAnchorType() {
+        return RSAnchorType.TOP_CENTER;
+    }
+
+    @ConfigItem(
+            position = 17,
+            keyName = "runAnchorX",
+            name = "Run Offset X",
+            description = "Configure run bar x offset."
+    )
+    default int runAnchorX() {
+        return 0;
+    }
+
+    @ConfigItem(
+            position = 18,
+            keyName = "runAnchorY",
+            name = "Run Offset Y",
+            description = "Configures run bar y offset."
+    )
+    default int runAnchorY() {
+        return 160;
+    }
+
+    @ConfigItem(
+            position = 19,
+            keyName = "runWidth",
+            name = "Run Width",
+            description = "Configures run bar width."
+    )
+    default int runWidth() {
+        return 160;
+    }
+
+    @ConfigItem(
+            position = 20,
+            keyName = "runHeight",
+            name = "Run Height",
+            description = "Configures run bar height."
+    )
+    default int runHeight() {
+        return 25;
     }
 }

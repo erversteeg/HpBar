@@ -20,8 +20,8 @@ import java.time.Instant;
 import java.util.*;
 
 @PluginDescriptor(
-	name = "Frost HP",
-	description = "A basic health bar overlay."
+	name = "Frost HP & Run",
+	description = "Health and run bar overlays."
 )
 
 public class HpBarPlugin extends Plugin
@@ -72,10 +72,8 @@ public class HpBarPlugin extends Plugin
 	@Subscribe
 	public void onConfigChanged(ConfigChanged configChanged)
 	{
-		if (overlay.isVisible()) {
-			overlay.clearViewInfo();
-			overlay.setupViews(false);
-		}
+		overlay.clearHpViewInfo();
+		overlay.clearRunViewInfo();
 	}
 
 	@Subscribe

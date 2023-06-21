@@ -27,7 +27,8 @@ class HpBarOverlay extends RSViewOverlay {
 
 	List<BarType> types;
 
-	private RSColumn column;
+	private RSColumn hpColumn;
+	private RSColumn runColumn;
 
 	private RSBar primaryBar;
 	private RSTextView primaryTextView;
@@ -40,6 +41,12 @@ class HpBarOverlay extends RSViewOverlay {
 
 	private RSBar quaternaryBar;
 	private RSTextView quaternaryTextView;
+
+	private RSBar runBar;
+	private RSTextView runTextView;
+
+	private String hpViewName = "hp_view";
+	private String runViewName = "run_view";
 
 	@Inject
 	private HpBarOverlay(
@@ -60,11 +67,9 @@ class HpBarOverlay extends RSViewOverlay {
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
-	void setupViews(boolean animate)
+	void setupHpBar(boolean animate)
 	{
-		clearViewInfo();
-
-		System.out.println("Setup Views");
+		clearHpViewInfo();
 
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -75,17 +80,9 @@ class HpBarOverlay extends RSViewOverlay {
 
 		boolean hasSecondaryText = config.hasSecondaryText();
 
-		column = new RSColumn(0,0, width, RSView.WRAP_CONTENT);
+		hpColumn = new RSColumn(0,0, width, RSView.WRAP_CONTENT);
 
-		if (plugin.isRun() && !plugin.isActive())
-		{
-			types = new ArrayList<>();
-			types.add(BarType.RUN_ENERGY);
-		}
-		else
-		{
-			types = types();
-		}
+		types = types();
 
 		Collections.reverse(types);
 
@@ -123,7 +120,7 @@ class HpBarOverlay extends RSViewOverlay {
 					container.addView(text);
 				}
 
-				column.addView(container);
+				hpColumn.addView(container);
 
 				if (i == types.size() - 2)
 				{
@@ -156,29 +153,34 @@ class HpBarOverlay extends RSViewOverlay {
 				text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
 
 				container.addView(bar);
-				container.addView(text);
+				if (config.hasPrimaryText())
+				{
+					container.addView(text);
+				}
 
-				column.addView(container);
+				hpColumn.addView(container);
 
 				primaryBar = bar;
 				primaryTextView = text;
 			}
 		}
 
-		column.setRenderReverse(true);
+		hpColumn.setRenderReverse(true);
 
 		if (animate)
 		{
-			column.animate()
+			hpColumn.animate()
 					.duration(0.1f)
 					.fadeIn()
 					.start();
 		}
 
-		addViewInfo(new ViewInfo(client, column, config.anchorType(), config.anchorX(), config.anchorY()));
+		ViewInfo hpViewInfo = new ViewInfo(client, hpColumn, config.anchorType(), config.anchorX(), config.anchorY());
+
+		addViewInfo(hpViewName, hpViewInfo);
 	}
 
-	private void updateViews()
+	private void updateHpBar()
 	{
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -214,6 +216,68 @@ class HpBarOverlay extends RSViewOverlay {
 				primaryTextView.setText(String.valueOf(primaryBar.getValue()));
 			}
 		}
+	}
+
+	void setupRunBar(boolean animate)
+	{
+		clearRunViewInfo();
+
+		Map<BarType, BarInfo> barInfo = plugin.barInfo();
+
+		int width = Math.min(800, Math.max(config.runWidth(), 40));
+		int height = Math.min(150, Math.max(config.runHeight(), 20));
+
+		setFonts(height);
+
+		runColumn = new RSColumn(0,0, width, RSView.WRAP_CONTENT);
+
+		types = new ArrayList<>();
+		types.add(BarType.RUN_ENERGY);
+
+		BarInfo info = barInfo.get(BarType.RUN_ENERGY);
+
+		RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
+
+		RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue);
+		RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT,
+				RSView.WRAP_CONTENT, primaryFont);
+
+		bar.setValue(info.value);
+		bar.setHue(info.hue);
+
+		text.setText(String.format("%d", bar.getValue()));
+		text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+
+		container.addView(bar);
+		container.addView(text);
+
+		runColumn.addView(container);
+
+		runBar = bar;
+		runTextView = text;
+
+		if (animate)
+		{
+			runColumn.animate()
+					.duration(0.1f)
+					.fadeIn()
+					.start();
+		}
+
+		ViewInfo runViewInfo = new ViewInfo(client, runColumn, config.runAnchorType(),
+				config.runAnchorX(), config.runAnchorY());
+
+		addViewInfo(runViewName, runViewInfo);
+	}
+
+	private void updateRunBar()
+	{
+		Map<BarType, BarInfo> barInfo = plugin.barInfo();
+		BarInfo info = barInfo.get(BarType.RUN_ENERGY);
+
+		runBar.setValue(info.value);
+		runBar.setHue(info.hue);
+		runTextView.setText(String.valueOf(runBar.getValue()));
 	}
 
 	private void setFonts(int height)
@@ -259,44 +323,71 @@ class HpBarOverlay extends RSViewOverlay {
 	}
 
 	private boolean isFadeOut = false;
+	private boolean isFadeOutRun = false;
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (config.isAlwaysVisible())
+		if (config.isAlwaysVisible() && config.showHpBar())
 		{
-			setupViews(false);
-			return super.render(graphics);
+			setupHpBar(false);
 		}
-
-		if (getViewInfo().isEmpty())
+		else if (config.showHpBar())
 		{
-			if (isVisible())
+			if (isVisible() && !containsViewInfo(hpViewName))
 			{
-				clearViewInfo();
-				setupViews(true);
+				setupHpBar(true);
 			}
-		}
-		else
-		{
-			if (isVisible())
+			else if (isVisible())
 			{
-				updateViews();
+				updateHpBar();
 			}
-			else
+			else if (containsViewInfo(hpViewName))
 			{
 				if (!isFadeOut)
 				{
-					column.animate()
+					hpColumn.animate()
 							.fadeOut()
 							.duration(0.10f)
 							.onComplete(() -> {
-								clearViewInfo();
+								removeViewInfo(hpViewName);
 								isFadeOut = false;
 							})
 							.start();
 
 					isFadeOut = true;
+				}
+			}
+		}
+
+		if (config.isRunAlwaysVisible() && config.showRunBar())
+		{
+			setupRunBar(false);
+		}
+		else if (config.showRunBar())
+		{
+			if (isRunVisible() && !containsViewInfo(runViewName))
+			{
+				setupRunBar(true);
+			}
+			else if (isRunVisible())
+			{
+				updateRunBar();
+			}
+			else if (containsViewInfo(runViewName))
+			{
+				if (!isFadeOutRun)
+				{
+					runColumn.animate()
+							.fadeOut()
+							.duration(0.10f)
+							.onComplete(() -> {
+								removeViewInfo(runViewName);
+								isFadeOutRun = false;
+							})
+							.start();
+
+					isFadeOutRun = true;
 				}
 			}
 		}
@@ -348,7 +439,23 @@ class HpBarOverlay extends RSViewOverlay {
 		return false;
 	}
 
-	public boolean isVisible() {
-		return config.isAlwaysVisible() || plugin.isActive() || (plugin.isRun() && config.showRunBar());
+	public boolean isVisible()
+	{
+		return config.isAlwaysVisible() || plugin.isActive();
+	}
+
+	public boolean isRunVisible()
+	{
+		return plugin.isRun() && config.showRunBar();
+	}
+
+	public void clearHpViewInfo()
+	{
+		removeViewInfo(hpViewName);
+	}
+
+	public void clearRunViewInfo()
+	{
+		removeViewInfo(runViewName);
 	}
 }

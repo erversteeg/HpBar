@@ -6,21 +6,25 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.*;
 import java.time.Instant;
+import java.util.Map;
 
 public class RSViewOverlay extends Overlay
 {
-    private List<ViewInfo> viewInfo = new ArrayList<>();
+    private Map<String, ViewInfo> viewInfo = new HashMap<>();
 
     @Override
     public Dimension render(Graphics2D graphics)
     {
         long start = Instant.now().toEpochMilli();
 
-        for (ViewInfo info: viewInfo)
+        for (String name: viewInfo.keySet())
         {
+            ViewInfo info = viewInfo.get(name);
+
             Client client = info.getClient();
             RSViewGroup view = info.getView();
             RSAnchorType anchorType = info.getAnchorType();
@@ -68,15 +72,25 @@ public class RSViewOverlay extends Overlay
         return new Dimension(0, 0);
     }
 
-    public List<ViewInfo> getViewInfo()
+    public Map<String, ViewInfo> getViewInfo()
     {
         return viewInfo;
     }
 
-    public void addViewInfo(ViewInfo viewInfo) {
-        this.viewInfo.add(viewInfo);
+    public void addViewInfo(String name, ViewInfo viewInfo) {
+        this.viewInfo.put(name, viewInfo);
     }
 
+    public void removeViewInfo(String name)
+    {
+        this.viewInfo.remove(name);
+    }
+
+    public boolean containsViewInfo(String name)
+    {
+        return viewInfo.containsKey(name);
+    }
+    
     public void clearViewInfo()
     {
         viewInfo.clear();
