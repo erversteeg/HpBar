@@ -86,8 +86,7 @@ public class RSView implements RSRenderable
 
     protected float opacity = 1f;
 
-    private RSAnimation animation;
-    private boolean isAnimating = false;
+    protected RSAnimation animation;
 
     protected RSViewGroup parent = null;
 
@@ -226,14 +225,9 @@ public class RSView implements RSRenderable
         return opacity;
     }
 
-    public void setAnimating(boolean animating)
+    public void setAnimation(RSAnimation animation)
     {
-        isAnimating = animating;
-
-        if (!isAnimating)
-        {
-            animation = null;
-        }
+        this.animation = animation;
     }
 
     public RSView getParent()
@@ -341,9 +335,11 @@ public class RSView implements RSRenderable
     @Override
     public void render(Graphics2D graphics, Point origin)
     {
-        if (animation != null && isAnimating)
+        if (animation != null && (animation.getType() == RSAnimation.Type.FADE_IN
+                || animation.getType() == RSAnimation.Type.FADE_OUT))
         {
-            animation.render();
+            System.out.println("Animating opacity");
+            setOpacity(animation.getValue());
         }
 
         graphics.setColor(colorWithOpacity(bgColor));

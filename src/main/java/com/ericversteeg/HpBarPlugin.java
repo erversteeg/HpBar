@@ -72,8 +72,11 @@ public class HpBarPlugin extends Plugin
 	@Subscribe
 	public void onConfigChanged(ConfigChanged configChanged)
 	{
-		overlay.clearHpViewInfo();
-		overlay.clearRunViewInfo();
+		if (configChanged.getGroup().equals(HpBarConfig.GROUP))
+		{
+			overlay.clearHpViewInfo();
+			overlay.clearRunViewInfo();
+		}
 	}
 
 	@Subscribe
@@ -192,7 +195,7 @@ public class HpBarPlugin extends Plugin
 
 	public boolean isRun()
 	{
-		return Instant.now().toEpochMilli() - lastRunChange <= 2400L;
+		return Instant.now().toEpochMilli() - lastRunChange <= 3600L;
 	}
 
 	public Map<BarType, BarInfo> barInfo()

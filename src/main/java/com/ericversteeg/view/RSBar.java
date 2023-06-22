@@ -39,7 +39,24 @@ public class RSBar extends RSView {
 
     public void setValue(int value)
     {
+        int oldValue = this.value;
         this.value = value;
+
+        if (oldValue != value)
+        {
+            //System.out.println("Starting animation");
+            float pixelsPerValue = w / maxValue;
+
+            float pixels = Math.abs((oldValue - value) * pixelsPerValue);
+
+            if (pixels >= 5)
+            {
+                this.animate()
+                        .interpolate(oldValue, value)
+                        .duration(0.25f)
+                        .start();
+            }
+        }
     }
 
     public int getMaxValue()
@@ -76,11 +93,21 @@ public class RSBar extends RSView {
         LinearGradientPaint gradientPaint = new LinearGradientPaint(origin.x + x, origin.y + y,
                 origin.x + x, origin.y + y + h, stops, colors);
         graphics.setPaint(gradientPaint);
-        graphics.fillRect(origin.x + x, origin.y + y, (int) (w * (value / maxValue)), h);
+
+        int barSize = (int) (w * (value / maxValue));
+        if (animation != null && animation.getType() == RSAnimation.Type.INTERPOLATE)
+        {
+            //float aValue = animation.getValue();
+            //System.out.println("Animation value is " + aValue);
+            barSize = (int) (w * (animation.getValue() / maxValue));
+            //System.out.println("Bar size is " + barSize);
+        }
+
+        graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
 
         gradientPaint = new LinearGradientPaint(origin.x + x, h, origin.x + x + w, h, overlayStops, overlayColors);
         graphics.setPaint(gradientPaint);
-        graphics.fillRect(origin.x + x, origin.y + y, (int) (w * (value / maxValue)), h);
+        graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
     }
 
     private Color hueColor(Color color, float hue)

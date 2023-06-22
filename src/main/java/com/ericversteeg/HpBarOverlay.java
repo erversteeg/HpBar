@@ -234,9 +234,6 @@ class HpBarOverlay extends RSViewOverlay {
 
 		runColumn = new RSColumn(0,0, width, RSView.WRAP_CONTENT);
 
-		types = new ArrayList<>();
-		types.add(BarType.RUN_ENERGY);
-
 		BarInfo info = barInfo.get(BarType.RUN_ENERGY);
 
 		RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
@@ -338,30 +335,40 @@ class HpBarOverlay extends RSViewOverlay {
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (config.isAlwaysVisible() && config.showHpBar())
+		if (config.isAlwaysVisible() && config.showHpBar() && !containsViewInfo(hpViewName))
 		{
+			//System.out.println("Always visible, view info not there, setup hp bar, fade in false");
 			setupHpBar(false);
+		}
+		else if (config.isAlwaysVisible() && config.showHpBar())
+		{
+			//System.out.println("Always visible, update hp bar");
+			updateHpBar();
 		}
 		else if (config.showHpBar())
 		{
-			if (isVisible() && !containsViewInfo(hpViewName))
+			if (plugin.isActive() && !containsViewInfo(hpViewName))
 			{
+				//System.out.println("Sometimes visible, view info not there, setup hp bar, fade in true");
 				setupHpBar(true);
 			}
-			else if (isVisible())
+			else if (plugin.isActive())
 			{
+				//System.out.println("Sometimes visible, update hp bar");
 				updateHpBar();
 			}
 			else if (containsViewInfo(hpViewName))
 			{
 				if (!isFadeOut)
 				{
+					//System.out.println("Fade out hp bar start");
 					hpColumn.animate()
 							.fadeOut()
 							.duration(0.10f)
 							.onComplete(() -> {
 								removeViewInfo(hpViewName);
 								isFadeOut = false;
+								//System.out.println("fade out hp bar done");
 							})
 							.start();
 
@@ -370,30 +377,40 @@ class HpBarOverlay extends RSViewOverlay {
 			}
 		}
 
-		if (config.isRunAlwaysVisible() && config.showRunBar())
+		if (config.isRunAlwaysVisible() && config.showRunBar() && !containsViewInfo(runViewName))
 		{
+			//System.out.println("Always visible, view info not there, setup run bar, fade in false");
 			setupRunBar(false);
+		}
+		else if (config.isRunAlwaysVisible() && config.showRunBar())
+		{
+			//System.out.println("Always visible, update run bar");
+			updateRunBar();
 		}
 		else if (config.showRunBar())
 		{
-			if (isRunVisible() && !containsViewInfo(runViewName))
+			if (plugin.isRun() && !containsViewInfo(runViewName))
 			{
+				//System.out.println("Sometimes visible, view info not there, setup run bar, fade in true");
 				setupRunBar(true);
 			}
-			else if (isRunVisible())
+			else if (plugin.isRun())
 			{
+				//System.out.println("Sometimes visible, update run bar");
 				updateRunBar();
 			}
 			else if (containsViewInfo(runViewName))
 			{
 				if (!isFadeOutRun)
 				{
+					//System.out.println("Fade out run bar start");
 					runColumn.animate()
 							.fadeOut()
 							.duration(0.10f)
 							.onComplete(() -> {
 								removeViewInfo(runViewName);
 								isFadeOutRun = false;
+								//System.out.println("fade out run bar done");
 							})
 							.start();
 
@@ -447,16 +464,6 @@ class HpBarOverlay extends RSViewOverlay {
 			}
 		}
 		return false;
-	}
-
-	public boolean isVisible()
-	{
-		return config.isAlwaysVisible() || plugin.isActive();
-	}
-
-	public boolean isRunVisible()
-	{
-		return plugin.isRun() && config.showRunBar();
 	}
 
 	public void clearHpViewInfo()
