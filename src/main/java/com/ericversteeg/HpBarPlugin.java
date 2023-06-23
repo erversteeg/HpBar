@@ -5,6 +5,8 @@ import com.ericversteeg.config.BarType;
 import com.google.gson.Gson;
 import com.google.inject.Provides;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -42,7 +44,6 @@ public class HpBarPlugin extends Plugin
 	private boolean fromActivePrayer = false;
 
 	private long lastRunChange = 0L;
-	private int lastRun = -1;
 
 	private long lastAttackChange = 0L;
 	private int lastAttack = -1;
@@ -120,13 +121,6 @@ public class HpBarPlugin extends Plugin
 			}
 		}
 
-		int run = client.getEnergy() / 100;
-		if (lastRun >= 0 && run - lastRun != 0 && run - lastRun != 1)
-		{
-			lastRunChange = Instant.now().toEpochMilli();
-		}
-		lastRun = run;
-
 		int attack = client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT) / 10;
 		if (lastAttack >= 0 && attack - lastAttack < 0)
 		{
@@ -134,6 +128,20 @@ public class HpBarPlugin extends Plugin
 		}
 		lastAttack = attack;
 
+		LocalPoint currentLocation = client.getLocalPlayer().getLocalLocation();
+		LocalPoint destinationLocation = client.getLocalDestinationLocation();
+
+		if (currentLocation != null && destinationLocation != null)
+		{
+			WorldPoint worldLocation = WorldPoint.fromLocal(client, currentLocation);
+			WorldPoint worldDestination = WorldPoint.fromLocal(client, destinationLocation);
+
+			int distance = worldLocation.distanceTo(worldDestination);
+			if (distance > 2)
+			{
+				lastRunChange = Instant.now().toEpochMilli();
+			}
+		}
 	}
 
 	@Subscribe
@@ -195,7 +203,7 @@ public class HpBarPlugin extends Plugin
 
 	public boolean isRun()
 	{
-		return Instant.now().toEpochMilli() - lastRunChange <= 3600L;
+		return Instant.now().toEpochMilli() - lastRunChange <= 1800L;
 	}
 
 	public Map<BarType, BarInfo> barInfo()

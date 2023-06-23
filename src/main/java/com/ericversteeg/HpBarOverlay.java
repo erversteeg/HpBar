@@ -105,7 +105,7 @@ class HpBarOverlay extends RSViewOverlay {
 				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
 				if (i == types.size() - 2 && config.isLargeSecondary())
 				{
-					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, secondaryFont);
+					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
 					text.setLayoutGravity(RSViewGroup.Gravity.START);
 				}
 
