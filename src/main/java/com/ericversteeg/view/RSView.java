@@ -1,7 +1,10 @@
 package com.ericversteeg.view;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class RSView implements RSRenderable
 {
@@ -86,7 +89,7 @@ public class RSView implements RSRenderable
 
     protected float opacity = 1f;
 
-    protected RSAnimation animation;
+    protected Map<RSAnimation.Type, RSAnimation> animations = new HashMap<>();
 
     protected RSViewGroup parent = null;
 
@@ -225,9 +228,14 @@ public class RSView implements RSRenderable
         return opacity;
     }
 
-    public void setAnimation(RSAnimation animation)
+    public void addAnimation(RSAnimation.Type type, RSAnimation animation)
     {
-        this.animation = animation;
+        animations.put(type, animation);
+    }
+
+    public void removeAnimation(RSAnimation.Type type)
+    {
+        animations.remove(type);
     }
 
     public RSView getParent()
@@ -335,11 +343,18 @@ public class RSView implements RSRenderable
     @Override
     public void render(Graphics2D graphics, Point origin)
     {
-        if (animation != null && (animation.getType() == RSAnimation.Type.FADE_IN
-                || animation.getType() == RSAnimation.Type.FADE_OUT))
+        RSAnimation fadeIn = animations.get(RSAnimation.Type.FADE_IN);
+        RSAnimation fadeOut = animations.get(RSAnimation.Type.FADE_OUT);
+
+        if (fadeIn != null)
         {
             System.out.println("Animating opacity");
-            setOpacity(animation.getValue());
+            setOpacity(fadeIn.getValue());
+        }
+        else if (fadeOut != null)
+        {
+            System.out.println("Animating opacity");
+            setOpacity(fadeOut.getValue());
         }
 
         graphics.setColor(colorWithOpacity(bgColor));
@@ -359,8 +374,6 @@ public class RSView implements RSRenderable
 
     public RSAnimation animate()
     {
-        RSAnimation animation = new RSAnimation(this);
-        this.animation = animation;
-        return animation;
+        return new RSAnimation(this);
     }
 }

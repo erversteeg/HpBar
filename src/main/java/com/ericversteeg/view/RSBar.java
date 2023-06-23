@@ -53,7 +53,8 @@ public class RSBar extends RSView {
             {
                 this.animate()
                         .interpolate(oldValue, value)
-                        .duration(0.25f)
+                        .duration(0.2f)
+                        .easeOut()
                         .start();
             }
         }
@@ -95,7 +96,8 @@ public class RSBar extends RSView {
         graphics.setPaint(gradientPaint);
 
         int barSize = (int) (w * (value / maxValue));
-        if (animation != null && animation.getType() == RSAnimation.Type.INTERPOLATE)
+        RSAnimation animation = animations.get(RSAnimation.Type.INTERPOLATE);
+        if (animation != null)
         {
             //float aValue = animation.getValue();
             //System.out.println("Animation value is " + aValue);

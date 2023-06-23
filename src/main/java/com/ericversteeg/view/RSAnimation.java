@@ -21,6 +21,7 @@ public class RSAnimation
     private float from;
     private float to;
     private OnComplete onComplete;
+    private boolean easeOut = false;
 
     public RSAnimation(RSView view)
     {
@@ -56,8 +57,15 @@ public class RSAnimation
         return this;
     }
 
+    public RSAnimation easeOut()
+    {
+        easeOut = true;
+        return this;
+    }
+
     public RSAnimation start()
     {
+        view.addAnimation(type, this);
         this.start = Instant.now().toEpochMilli();
         //System.out.println("Start called");
         return this;
@@ -77,6 +85,11 @@ public class RSAnimation
     public float getValue()
     {
         float t = Math.min((Instant.now().toEpochMilli() - start) / 1000f / duration, 1f);
+        if (easeOut)
+        {
+            t = easeOut(t);
+        }
+
         float value = 0f;
 
         //System.out.println("T is " + t);
@@ -97,7 +110,7 @@ public class RSAnimation
         if (t >= 1f)
         {
             //System.out.println("Finished animating, type is " + getType());
-            view.setAnimation(null);
+            view.removeAnimation(type);
             if (onComplete != null)
             {
                 onComplete.onComplete();
@@ -105,6 +118,11 @@ public class RSAnimation
         }
 
         return value;
+    }
+
+    private float easeOut(float t)
+    {
+        return (float) (1 - Math.pow(1 - t, 3));
     }
 
     public interface OnComplete
