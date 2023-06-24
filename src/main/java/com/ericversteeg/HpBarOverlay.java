@@ -69,7 +69,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 	void setupHpBar(boolean animate)
 	{
-		clearHpViewInfo();
+		//clearHpViewInfo();
 
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -223,7 +223,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 	void setupRunBar(boolean animate)
 	{
-		clearRunViewInfo();
+		//clearRunViewInfo();
 
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -366,7 +366,7 @@ class HpBarOverlay extends RSViewOverlay {
 							.fadeOut()
 							.duration(0.10f)
 							.onComplete(() -> {
-								removeViewInfo(hpViewName);
+								removeViewInfo(hpViewName, false);
 								isFadeOut = false;
 								//System.out.println("fade out hp bar done");
 							})
@@ -408,7 +408,7 @@ class HpBarOverlay extends RSViewOverlay {
 							.fadeOut()
 							.duration(0.10f)
 							.onComplete(() -> {
-								removeViewInfo(runViewName);
+								removeViewInfo(runViewName, false);
 								isFadeOutRun = false;
 								//System.out.println("fade out run bar done");
 							})
@@ -468,11 +468,11 @@ class HpBarOverlay extends RSViewOverlay {
 
 	public void clearHpViewInfo()
 	{
-		removeViewInfo(hpViewName);
+		removeViewInfo(hpViewName, true);
 	}
 
 	public void clearRunViewInfo()
 	{
-		removeViewInfo(runViewName);
+		removeViewInfo(runViewName, true);
 	}
 }

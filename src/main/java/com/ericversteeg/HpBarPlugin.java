@@ -15,6 +15,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.RSTimeUnit;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 import java.time.Duration;
@@ -45,8 +46,7 @@ public class HpBarPlugin extends Plugin
 
 	private long lastRunChange = 0L;
 
-	private long lastAttackChange = 0L;
-	private int lastAttack = -1;
+	private long lastCombatChange = 0L;
 
 	boolean isStaminaActive = false;
 
@@ -112,21 +112,25 @@ public class HpBarPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
-		Prayer [] prayers = Prayer.values();
-		for (Prayer prayer: prayers) {
-			if (client.isPrayerActive(prayer)) {
-				lastPrayerChange = Instant.now().toEpochMilli();
-				fromActivePrayer = true;
-				break;
+		Player localPlayer = client.getLocalPlayer();
+
+		if (localPlayer != null)
+		{
+			// from Status Bars plugin
+			Actor interacting = localPlayer.getInteracting();
+
+			if ((interacting instanceof NPC && ArrayUtils.contains(((NPC) interacting).getComposition().getActions(), "Attack"))
+					|| (interacting instanceof Player && client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1)) {
+
+				lastCombatChange = Instant.now().toEpochMilli();
 			}
 		}
 
-		int attack = client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT) / 10;
-		if (lastAttack >= 0 && attack - lastAttack < 0)
+		if (isPrayerActive())
 		{
-			lastAttackChange = Instant.now().toEpochMilli();
+			lastPrayerChange = Instant.now().toEpochMilli();
+			fromActivePrayer = true;
 		}
-		lastAttack = attack;
 
 		LocalPoint currentLocation = client.getLocalPlayer().getLocalLocation();
 		LocalPoint destinationLocation = client.getLocalDestinationLocation();
@@ -167,17 +171,17 @@ public class HpBarPlugin extends Plugin
 	{
 		long lastActive = getLastActive();
 
-		long hideDelay = 3600L;
-		if (lastActive == lastPrayerChange && fromActivePrayer) {
-			hideDelay = 1800L;
+		long delay = 1800L;
+		if (lastActive == lastHpChange || (lastActive == lastPrayerChange && !fromActivePrayer))
+		{
+			delay = 3600L;
 		}
-
-		return Instant.now().toEpochMilli() - lastActive <= hideDelay;
+		return Instant.now().toEpochMilli() - lastActive <= delay;
 	}
 
 	public long getLastActive()
 	{
-		long lastActive = 0L;
+		long lastActive = lastCombatChange;
 
 		if (overlay.hasBarType(BarType.HITPOINTS) && lastHpChange > lastActive)
 		{
@@ -186,10 +190,6 @@ public class HpBarPlugin extends Plugin
 		if (overlay.hasBarType(BarType.PRAYER) && lastPrayerChange > lastActive)
 		{
 			lastActive = lastPrayerChange;
-		}
-		if (overlay.hasBarType(BarType.SPECIAL_ATTACK) && lastAttackChange > lastActive)
-		{
-			lastActive = lastAttackChange;
 		}
 		if (!config.showRunBar())
 		{
@@ -206,6 +206,17 @@ public class HpBarPlugin extends Plugin
 		return Instant.now().toEpochMilli() - lastRunChange <= 1800L;
 	}
 
+	private boolean isPrayerActive()
+	{
+		Prayer [] prayers = Prayer.values();
+		for (Prayer prayer: prayers) {
+			if (client.isPrayerActive(prayer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Map<BarType, BarInfo> barInfo()
 	{
 		BarInfo hitpoints = new BarInfo(
@@ -214,16 +225,22 @@ public class HpBarPlugin extends Plugin
 				0
 		);
 
+		int prayerHue = 175;
+		if (isPrayerActive())
+		{
+			prayerHue = 155;
+		}
+
 		BarInfo prayer = new BarInfo(
 				client.getBoostedSkillLevel(Skill.PRAYER),
 				client.getRealSkillLevel(Skill.PRAYER),
-				155
+				prayerHue
 		);
 
 		BarInfo attack = new BarInfo(
 				client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT) / 10,
 				100,
-				180
+				121
 		);
 
 		int runHue = 50;

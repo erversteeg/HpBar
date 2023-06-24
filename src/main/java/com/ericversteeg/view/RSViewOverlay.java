@@ -5,22 +5,24 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
 import java.time.Instant;
-import java.util.Map;
+import java.util.List;
 
 public class RSViewOverlay extends Overlay
 {
     private Map<String, ViewInfo> viewInfo = new HashMap<>();
+    private Set<String> pendingRemoves = new HashSet<>();
 
     @Override
     public Dimension render(Graphics2D graphics)
     {
+        removePending();
+
         long start = Instant.now().toEpochMilli();
 
+        int numInfo = 0;
         for (String name: viewInfo.keySet())
         {
             ViewInfo info = viewInfo.get(name);
@@ -65,7 +67,11 @@ public class RSViewOverlay extends Overlay
             }
 
             view.render(graphics, new Point(0, 0));
+
+            numInfo += 1 ;
         }
+
+        //System.out.println(numInfo);
 
         //System.out.println("Render in " + (Instant.now().toEpochMilli() - start) + "ms");
 
@@ -81,14 +87,30 @@ public class RSViewOverlay extends Overlay
         this.viewInfo.put(name, viewInfo);
     }
 
-    public void removeViewInfo(String name)
+    public void removeViewInfo(String name, boolean immediate)
     {
-        this.viewInfo.remove(name);
+        if (immediate)
+        {
+            viewInfo.remove(name);
+        }
+        else
+        {
+            pendingRemoves.add(name);
+        }
+    }
+
+    private void removePending()
+    {
+        for (String name: pendingRemoves)
+        {
+            viewInfo.remove(name);
+        }
+        pendingRemoves.clear();
     }
 
     public boolean containsViewInfo(String name)
     {
-        return viewInfo.containsKey(name);
+        return viewInfo.containsKey(name) && !pendingRemoves.contains(name);
     }
     
     public void clearViewInfo()

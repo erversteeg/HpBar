@@ -348,12 +348,12 @@ public class RSView implements RSRenderable
 
         if (fadeIn != null)
         {
-            System.out.println("Animating opacity");
+            //System.out.println("Animating opacity");
             setOpacity(fadeIn.getValue());
         }
         else if (fadeOut != null)
         {
-            System.out.println("Animating opacity");
+            //System.out.println("Animating opacity");
             setOpacity(fadeOut.getValue());
         }
 
