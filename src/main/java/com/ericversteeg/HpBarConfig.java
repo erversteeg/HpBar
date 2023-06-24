@@ -150,7 +150,7 @@ public interface HpBarConfig extends Config
             section = hpBarSection
     )
     default int width() {
-        return 200;
+        return 145;
     }
 
     @ConfigItem(
@@ -161,7 +161,7 @@ public interface HpBarConfig extends Config
             section = hpBarSection
     )
     default int height() {
-        return 30;
+        return 20;
     }
 
     @ConfigSection(
@@ -248,7 +248,7 @@ public interface HpBarConfig extends Config
             section = runBarSection
     )
     default int runWidth() {
-        return 160;
+        return 145;
     }
 
     @ConfigItem(
@@ -259,6 +259,6 @@ public interface HpBarConfig extends Config
             section = runBarSection
     )
     default int runHeight() {
-        return 25;
+        return 20;
     }
 }

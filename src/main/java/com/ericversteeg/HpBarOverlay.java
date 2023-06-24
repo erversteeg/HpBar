@@ -69,7 +69,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 	void setupHpBar(boolean animate)
 	{
-		//clearHpViewInfo();
+		clearHpViewInfo();
 
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -92,7 +92,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 			if (i < types.size() - 1)
 			{
-				RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 4);
+				RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 3);
 				if (i == types.size() - 2 && config.isLargeSecondary())
 				{
 					container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 2);
@@ -150,7 +150,8 @@ class HpBarOverlay extends RSViewOverlay {
 				bar.setHue(info.hue);
 
 				text.setText(String.format("%d", bar.getValue()));
-				text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+				text.setLayoutGravity(RSViewGroup.Gravity.TOP);
+				text.setMarginTop(height / 8);
 
 				container.addView(bar);
 				if (config.hasPrimaryText())
@@ -223,7 +224,7 @@ class HpBarOverlay extends RSViewOverlay {
 
 	void setupRunBar(boolean animate)
 	{
-		//clearRunViewInfo();
+		clearRunViewInfo();
 
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 
@@ -246,7 +247,8 @@ class HpBarOverlay extends RSViewOverlay {
 		bar.setHue(info.hue);
 
 		text.setText(String.format("%d", bar.getValue()));
-		text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+		text.setLayoutGravity(RSViewGroup.Gravity.TOP);
+		text.setMarginTop(height / 8);
 
 		container.addView(bar);
 
@@ -293,7 +295,7 @@ class HpBarOverlay extends RSViewOverlay {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 2));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height * 0.55f));
 			ge.registerFont(font);
 			primaryFont = font;
 		}
@@ -319,7 +321,7 @@ class HpBarOverlay extends RSViewOverlay {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 4));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 3));
 			ge.registerFont(font);
 			smallFont = font;
 		}
