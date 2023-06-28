@@ -7,8 +7,8 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 
-@ConfigGroup(HpBarConfig.GROUP)
-public interface HpBarConfig extends Config
+@ConfigGroup(FrostHpRunConfig.GROUP)
+public interface FrostHpRunConfig extends Config
 {
     String GROUP = "hpbar";
 

@@ -14,12 +14,12 @@ import java.awt.*;
 import java.io.InputStream;
 import java.util.List;
 
-class HpBarOverlay extends RSViewOverlay {
+class FrostHpRunOverlay extends RSViewOverlay {
 
 	private final Client client;
 	private final ItemManager itemManager;
-	private final HpBarPlugin plugin;
-	private final HpBarConfig config;
+	private final FrostHpRunPlugin plugin;
+	private final FrostHpRunConfig config;
 
 	private Font primaryFont;
 	private Font secondaryFont;
@@ -49,11 +49,11 @@ class HpBarOverlay extends RSViewOverlay {
 	private String runViewName = "run_view";
 
 	@Inject
-	private HpBarOverlay(
+	private FrostHpRunOverlay(
 			Client client,
 			ItemManager itemManager,
-			HpBarPlugin plugin,
-			HpBarConfig config)
+			FrostHpRunPlugin plugin,
+			FrostHpRunConfig config)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);

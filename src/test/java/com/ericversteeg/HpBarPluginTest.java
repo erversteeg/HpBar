@@ -7,7 +7,7 @@ public class HpBarPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(HpBarPlugin.class);
+		ExternalPluginManager.loadBuiltin(FrostHpRunPlugin.class);
 		RuneLite.main(args);
 	}
 }

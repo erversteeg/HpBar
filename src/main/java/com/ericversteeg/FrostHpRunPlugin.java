@@ -14,11 +14,9 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.RSTimeUnit;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -27,13 +25,12 @@ import java.util.*;
 	description = "Health and run bar overlays."
 )
 
-public class HpBarPlugin extends Plugin
+public class FrostHpRunPlugin extends Plugin
 {
-	@Inject private HpBarOverlay overlay;
+	@Inject private FrostHpRunOverlay overlay;
 	@Inject private OverlayManager overlayManager;
 	@Inject private Client client;
-	@Inject
-    HpBarConfig config;
+	@Inject private FrostHpRunConfig config;
 	@Inject private ConfigManager configManager;
 	@Inject private Gson gson;
 
@@ -50,8 +47,6 @@ public class HpBarPlugin extends Plugin
 
 	boolean isStaminaActive = false;
 
-	private HashSet<Skill> initSkills = new HashSet<>();
-
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -65,15 +60,15 @@ public class HpBarPlugin extends Plugin
 	}
 
 	@Provides
-    HpBarConfig provideConfig(ConfigManager configManager)
+	FrostHpRunConfig provideConfig(ConfigManager configManager)
 	{
-		return configManager.getConfig(HpBarConfig.class);
+		return configManager.getConfig(FrostHpRunConfig.class);
 	}
 
 	@Subscribe
 	public void onConfigChanged(ConfigChanged configChanged)
 	{
-		if (configChanged.getGroup().equals(HpBarConfig.GROUP))
+		if (configChanged.getGroup().equals(FrostHpRunConfig.GROUP))
 		{
 			overlay.clearHpViewInfo();
 			overlay.clearRunViewInfo();
