@@ -361,6 +361,7 @@ class FrostHpRunOverlay extends RSViewOverlay {
 			}
 			else if (containsViewInfo(hpViewName))
 			{
+				//System.out.println("Hp is fade out is " + isFadeOut);
 				if (!isFadeOut)
 				{
 					//System.out.println("Fade out hp bar start");
@@ -403,6 +404,7 @@ class FrostHpRunOverlay extends RSViewOverlay {
 			}
 			else if (containsViewInfo(runViewName))
 			{
+				//System.out.println("Run is fade out is " + isFadeOut);
 				if (!isFadeOutRun)
 				{
 					//System.out.println("Fade out run bar start");
@@ -471,10 +473,12 @@ class FrostHpRunOverlay extends RSViewOverlay {
 	public void clearHpViewInfo()
 	{
 		removeViewInfo(hpViewName, true);
+		isFadeOut = false;
 	}
 
 	public void clearRunViewInfo()
 	{
 		removeViewInfo(runViewName, true);
+		isFadeOutRun = false;
 	}
 }

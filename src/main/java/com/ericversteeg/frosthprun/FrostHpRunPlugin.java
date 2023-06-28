@@ -47,6 +47,7 @@ public class FrostHpRunPlugin extends Plugin
 	private long lastCombatChange = 0L;
 
 	boolean isStaminaActive = false;
+	private boolean lastStaminaActive = false;
 
 	@Override
 	protected void startUp() throws Exception
@@ -167,6 +168,11 @@ public class FrostHpRunPlugin extends Plugin
 			if (staminaEffectActive == 1)
 			{
 				isStaminaActive = totalStaminaEffect != 0;
+				if (!lastStaminaActive && isStaminaActive)
+				{
+					lastRunChange = Instant.now().toEpochMilli();
+				}
+				lastStaminaActive = isStaminaActive;
 			}
 		}
 	}
