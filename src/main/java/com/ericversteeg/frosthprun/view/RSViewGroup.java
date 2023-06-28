@@ -1,4 +1,4 @@
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import java.awt.*;
 import java.util.*;

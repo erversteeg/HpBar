@@ -1,6 +1,4 @@
-package com.ericversteeg.view;
-
-import net.runelite.client.ui.overlay.components.TextComponent;
+package com.ericversteeg.frosthprun.view;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

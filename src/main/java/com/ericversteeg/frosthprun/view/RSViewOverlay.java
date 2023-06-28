@@ -1,4 +1,4 @@
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import net.runelite.api.Client;
 import net.runelite.api.widgets.Widget;
@@ -8,7 +8,6 @@ import net.runelite.client.ui.overlay.Overlay;
 import java.util.*;
 import java.awt.*;
 import java.time.Instant;
-import java.util.List;
 
 public class RSViewOverlay extends Overlay
 {

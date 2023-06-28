@@ -1,4 +1,4 @@
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

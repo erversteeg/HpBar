@@ -1,8 +1,6 @@
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 public class RSAnimation
 {

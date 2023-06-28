@@ -1,8 +1,8 @@
-package com.ericversteeg;
+package com.ericversteeg.frosthprun;
 
-import com.ericversteeg.config.BarInfo;
-import com.ericversteeg.config.BarType;
-import com.ericversteeg.view.*;
+import com.ericversteeg.frosthprun.config.BarInfo;
+import com.ericversteeg.frosthprun.config.BarType;
+import com.ericversteeg.frosthprun.view.*;
 import net.runelite.api.*;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.FontManager;

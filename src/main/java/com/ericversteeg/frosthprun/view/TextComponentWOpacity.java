@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import java.awt.Color;
 import java.awt.Dimension;

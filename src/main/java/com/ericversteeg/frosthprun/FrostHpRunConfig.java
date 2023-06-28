@@ -1,7 +1,7 @@
-package com.ericversteeg;
+package com.ericversteeg.frosthprun;
 
-import com.ericversteeg.config.BarType;
-import com.ericversteeg.view.RSAnchorType;
+import com.ericversteeg.frosthprun.config.BarType;
+import com.ericversteeg.frosthprun.view.RSAnchorType;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;

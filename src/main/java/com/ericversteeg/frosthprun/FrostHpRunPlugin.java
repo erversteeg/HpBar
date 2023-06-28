@@ -1,7 +1,7 @@
-package com.ericversteeg;
+package com.ericversteeg.frosthprun;
 
-import com.ericversteeg.config.BarInfo;
-import com.ericversteeg.config.BarType;
+import com.ericversteeg.frosthprun.config.BarInfo;
+import com.ericversteeg.frosthprun.config.BarType;
 import com.google.gson.Gson;
 import com.google.inject.Provides;
 import net.runelite.api.*;

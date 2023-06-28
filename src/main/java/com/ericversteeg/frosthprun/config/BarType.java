@@ -1,4 +1,4 @@
-package com.ericversteeg.config;
+package com.ericversteeg.frosthprun.config;
 
 public enum BarType
 {

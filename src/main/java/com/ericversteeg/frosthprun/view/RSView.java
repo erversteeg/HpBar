@@ -1,10 +1,8 @@
-package com.ericversteeg.view;
+package com.ericversteeg.frosthprun.view;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class RSView implements RSRenderable
 {
