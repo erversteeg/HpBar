@@ -42,6 +42,7 @@ public class FrostHpRunPlugin extends Plugin
 	private boolean fromActivePrayer = false;
 
 	private long lastRunChange = 0L;
+	private int lastRun = -1;
 
 	private long lastCombatChange = 0L;
 
@@ -141,6 +142,14 @@ public class FrostHpRunPlugin extends Plugin
 				lastRunChange = Instant.now().toEpochMilli();
 			}
 		}
+
+		int run = client.getEnergy() / 100;
+		int runDiff = Math.abs(lastRun - run);
+		if (lastRun != -1 && runDiff != 0 && runDiff != 1)
+		{
+			lastRunChange = Instant.now().toEpochMilli();
+		}
+		lastRun = run;
 	}
 
 	@Subscribe
