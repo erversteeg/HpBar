@@ -43,6 +43,7 @@ public class FrostHpRunPlugin extends Plugin
 
 	private long lastRunChange = 0L;
 	private int lastRun = -1;
+	private boolean fromRunIncrease = false;
 
 	private long lastCombatChange = 0L;
 
@@ -141,14 +142,19 @@ public class FrostHpRunPlugin extends Plugin
 			if (distance > 2)
 			{
 				lastRunChange = Instant.now().toEpochMilli();
+				fromRunIncrease = false;
 			}
 		}
 
 		int run = client.getEnergy() / 100;
-		int runDiff = Math.abs(lastRun - run);
+		int runDiff = run - lastRun;
 		if (lastRun != -1 && runDiff != 0 && runDiff != 1)
 		{
-			lastRunChange = Instant.now().toEpochMilli();
+			if (runDiff > 0)
+			{
+				fromRunIncrease = true;
+				lastRunChange = Instant.now().toEpochMilli();
+			}
 		}
 		lastRun = run;
 	}
@@ -171,6 +177,7 @@ public class FrostHpRunPlugin extends Plugin
 				if (!lastStaminaActive && isStaminaActive)
 				{
 					lastRunChange = Instant.now().toEpochMilli();
+					fromRunIncrease = true;
 				}
 				lastStaminaActive = isStaminaActive;
 			}
@@ -213,7 +220,12 @@ public class FrostHpRunPlugin extends Plugin
 
 	public boolean isRun()
 	{
-		return Instant.now().toEpochMilli() - lastRunChange <= 1800L;
+		long delay = 1800L;
+		if (fromRunIncrease)
+		{
+			delay = 3600L;
+		}
+		return Instant.now().toEpochMilli() - lastRunChange <= delay;
 	}
 
 	private boolean isPrayerActive()

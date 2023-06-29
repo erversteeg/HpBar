@@ -139,7 +139,7 @@ public interface FrostHpRunConfig extends Config
             section = hpBarSection
     )
     default int anchorY() {
-        return 80;
+        return 100;
     }
 
     @ConfigItem(
@@ -237,7 +237,7 @@ public interface FrostHpRunConfig extends Config
             section = runBarSection
     )
     default int runAnchorY() {
-        return 160;
+        return 150;
     }
 
     @ConfigItem(
