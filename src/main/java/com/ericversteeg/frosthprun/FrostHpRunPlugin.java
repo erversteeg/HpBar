@@ -17,6 +17,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.*;
 
@@ -34,6 +35,8 @@ public class FrostHpRunPlugin extends Plugin
 	@Inject private ConfigManager configManager;
 	@Inject private Gson gson;
 
+	private static final int VENOM_THRESHOLD = 1000000;
+
 	private long lastHpChange = 0L;
 	private int lastHp = -1;
 
@@ -49,6 +52,10 @@ public class FrostHpRunPlugin extends Plugin
 
 	boolean isStaminaActive = false;
 	private boolean lastStaminaActive = false;
+
+	private boolean isPoisoned = false;
+	private boolean isEnvenomed = false;
+	private boolean isDiseased = false;
 
 	@Override
 	protected void startUp() throws Exception
@@ -157,6 +164,27 @@ public class FrostHpRunPlugin extends Plugin
 			}
 		}
 		lastRun = run;
+
+		// from Poison plugin
+		final int poison = client.getVarpValue(VarPlayer.POISON);
+
+		if (poison >= VENOM_THRESHOLD)
+		{
+			isPoisoned = false;
+			isEnvenomed = true;
+		}
+		else if (poison > 0)
+		{
+			isPoisoned = true;
+			isEnvenomed = false;
+		}
+		else
+		{
+			isPoisoned = false;
+			isEnvenomed = false;
+		}
+
+		isDiseased = client.getVarpValue(VarPlayer.DISEASE_VALUE) > 0;
 	}
 
 	@Subscribe
@@ -252,10 +280,24 @@ public class FrostHpRunPlugin extends Plugin
 
 	public Map<BarType, BarInfo> barInfo()
 	{
+		int hpHue = 0;
+		if (isEnvenomed)
+		{
+			hpHue = 145;
+		}
+		else if (isPoisoned)
+		{
+			hpHue = 95;
+		}
+		else if (isDiseased)
+		{
+			hpHue = 75;
+		}
+
 		BarInfo hitpoints = new BarInfo(
 				client.getBoostedSkillLevel(Skill.HITPOINTS),
 				client.getRealSkillLevel(Skill.HITPOINTS),
-				0
+				hpHue
 		);
 
 		int prayerHue = 175;
