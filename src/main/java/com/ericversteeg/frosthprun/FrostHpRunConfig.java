@@ -75,6 +75,15 @@ public interface FrostHpRunConfig extends Config
 
     @ConfigItem(
             position = 5,
+            keyName = "combatDelay",
+            name = "Combat Hide Delay",
+            description = "Configures how many ticks after combat the bar hides.",
+            section = hpBarSection
+    )
+    default int combatHideDelay() { return 0; }
+
+    @ConfigItem(
+            position = 5,
             keyName = "barOpacity",
             name = "Opacity",
             description = "Configures the opacity of the bar (20-100).",

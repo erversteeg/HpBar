@@ -97,7 +97,7 @@ public class FrostHpRunPlugin extends Plugin
 		else if (skill.ordinal() == Skill.PRAYER.ordinal())
 		{
 			int prayer = statChanged.getBoostedLevel();
-			if (lastPrayer >= 0)
+			if (lastPrayer >= 0 && lastPrayer != prayer)
 			{
 				lastPrayerChange = Instant.now().toEpochMilli();
 				fromActivePrayer = false;
@@ -118,8 +118,8 @@ public class FrostHpRunPlugin extends Plugin
 			Actor interacting = localPlayer.getInteracting();
 
 			if ((interacting instanceof NPC && ArrayUtils.contains(((NPC) interacting).getComposition().getActions(), "Attack"))
-					|| (interacting instanceof Player && client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1)) {
-
+					|| (interacting instanceof Player && client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1))
+			{
 				lastCombatChange = Instant.now().toEpochMilli();
 			}
 		}
@@ -165,7 +165,8 @@ public class FrostHpRunPlugin extends Plugin
 		// from Timers plugin
 		if (event.getVarbitId() == Varbits.RUN_SLOWED_DEPLETION_ACTIVE
 				|| event.getVarbitId() == Varbits.STAMINA_EFFECT
-				|| event.getVarbitId() == Varbits.RING_OF_ENDURANCE_EFFECT) {
+				|| event.getVarbitId() == Varbits.RING_OF_ENDURANCE_EFFECT)
+		{
 			int staminaEffectActive = client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE);
 			int staminaPotionEffectVarb = client.getVarbitValue(Varbits.STAMINA_EFFECT);
 			int enduranceRingEffectVarb = client.getVarbitValue(Varbits.RING_OF_ENDURANCE_EFFECT);
@@ -189,9 +190,18 @@ public class FrostHpRunPlugin extends Plugin
 		long lastActive = getLastActive();
 
 		long delay = 1800L;
-		if (lastActive == lastHpChange || (lastActive == lastPrayerChange && !fromActivePrayer))
+		if (lastActive == lastHpChange || (lastActive == lastPrayerChange && !fromActivePrayer)
+				|| (!config.showRunBar() && lastActive == lastRunChange && fromRunIncrease))
 		{
 			delay = 3600L;
+		}
+		else if (lastActive == lastCombatChange)
+		{
+			delay = (config.combatHideDelay() + 2) * 600L;
+		}
+		else if (lastActive == lastPrayerChange && fromActivePrayer)
+		{
+			delay = 1200L;
 		}
 		return Instant.now().toEpochMilli() - lastActive <= delay;
 	}
@@ -232,7 +242,8 @@ public class FrostHpRunPlugin extends Plugin
 	{
 		Prayer [] prayers = Prayer.values();
 		for (Prayer prayer: prayers) {
-			if (client.isPrayerActive(prayer)) {
+			if (client.isPrayerActive(prayer))
+			{
 				return true;
 			}
 		}
