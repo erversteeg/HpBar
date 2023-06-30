@@ -22,7 +22,7 @@ import java.util.*;
 
 @PluginDescriptor(
 	name = "Frost HP & Run",
-	description = "Health and run bar overlays."
+	description = "Hitpoints and run bar overlays."
 )
 
 public class FrostHpRunPlugin extends Plugin
