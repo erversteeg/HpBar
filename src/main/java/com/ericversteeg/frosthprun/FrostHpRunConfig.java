@@ -80,7 +80,7 @@ public interface FrostHpRunConfig extends Config
             description = "Configures how many ticks after combat the bar hides.",
             section = hpBarSection
     )
-    default int combatHideDelay() { return 0; }
+    default int combatHideDelay() { return 5; }
 
     @ConfigItem(
             position = 5,
