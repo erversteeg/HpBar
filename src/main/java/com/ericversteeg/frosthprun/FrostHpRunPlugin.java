@@ -82,6 +82,14 @@ public class FrostHpRunPlugin extends Plugin
 		{
 			overlay.clearHpViewInfo();
 			overlay.clearRunViewInfo();
+
+			if (configChanged.getKey().equals("smallFontScaleFactor")
+					|| configChanged.getKey().equals("secondaryFontScaleFactor")
+					|| configChanged.getKey().equals("primaryFontScaleFactor"))
+			{
+				int height = Math.min(150, Math.max(config.height(), 20));
+				overlay.setFonts(height);
+			}
 		}
 	}
 
@@ -280,18 +288,18 @@ public class FrostHpRunPlugin extends Plugin
 
 	public Map<BarType, BarInfo> barInfo()
 	{
-		int hpHue = 0;
+		int hpHue = Math.min(360, config.hpHue());
 		if (isEnvenomed)
 		{
-			hpHue = 145;
+			hpHue = Math.min(360, config.envenomedHue());
 		}
 		else if (isPoisoned)
 		{
-			hpHue = 95;
+			hpHue = Math.min(360, config.poisonedHue());
 		}
 		else if (isDiseased)
 		{
-			hpHue = 75;
+			hpHue = Math.min(360, config.diseasedHue());
 		}
 
 		BarInfo hitpoints = new BarInfo(
@@ -300,10 +308,10 @@ public class FrostHpRunPlugin extends Plugin
 				hpHue
 		);
 
-		int prayerHue = 175;
+		int prayerHue = Math.min(360, config.inactivePrayerHue());
 		if (isPrayerActive())
 		{
-			prayerHue = 155;
+			prayerHue = Math.min(360, config.activePrayerHue());
 		}
 
 		BarInfo prayer = new BarInfo(
@@ -315,13 +323,13 @@ public class FrostHpRunPlugin extends Plugin
 		BarInfo attack = new BarInfo(
 				client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT) / 10,
 				100,
-				121
+				Math.min(360, config.specialAttackHue())
 		);
 
-		int runHue = 50;
+		int runHue = Math.min(360, config.runHue());
 		if (isStaminaActive)
 		{
-			runHue = 25;
+			runHue = Math.min(360, config.staminaHue());
 		}
 
 		BarInfo run = new BarInfo(

@@ -69,6 +69,9 @@ public class RSView implements RSRenderable
     protected int w;
     protected int h;
 
+    protected int offsetX;
+    protected int offsetY;
+
     private Float weight = null;
     private WeightParams weightParams = null;
 
@@ -151,6 +154,26 @@ public class RSView implements RSRenderable
     public void setH(int h)
     {
         this.h = h;
+    }
+
+    public void setOffsetX(int offsetX)
+    {
+        this.offsetX = offsetX;
+    }
+
+    public int getOffsetX()
+    {
+        return offsetX;
+    }
+
+    public void setOffsetY(int offsetY)
+    {
+        this.offsetY = offsetY;
+    }
+
+    public int getOffsetY()
+    {
+        return offsetY;
     }
 
     public Float getWeight()
@@ -356,7 +379,7 @@ public class RSView implements RSRenderable
         }
 
         graphics.setColor(colorWithOpacity(bgColor));
-        graphics.fillRect(origin.x + x, origin.y + y, w, h);
+        graphics.fillRect(origin.x + x + offsetX, origin.y + y + offsetY, w, h);
 
         if (border != null)
         {

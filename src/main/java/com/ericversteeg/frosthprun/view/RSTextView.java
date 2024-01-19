@@ -185,13 +185,13 @@ public class RSTextView extends RSView
 
         if (hasImage)
         {
-            charRenderLinesImage(graphics, lineWidth, new Point(origin.x + x + paddingStart,
-                    origin.y + y + paddingTop));
+            charRenderLinesImage(graphics, lineWidth, new Point(origin.x + x + offsetX + paddingStart,
+                    origin.y + y + offsetY + paddingTop));
 
             graphics.setColor(imageBgColor);
 
-            graphics.fillRect(origin.x + x + paddingStart + imageX,
-                    origin.y + y + paddingTop + imageY, imageW, imageH);
+            graphics.fillRect(origin.x + x + offsetX + paddingStart + imageX,
+                    origin.y + y + offsetY + paddingTop + imageY, imageW, imageH);
 
             int offset = imageOffset;
             if (imageOffsetNegative)
@@ -199,13 +199,13 @@ public class RSTextView extends RSView
                 offset *= -1;
             }
 
-            graphics.drawImage(image, origin.x + x + paddingStart + imageX,
-                    origin.y + y + paddingTop + imageY + offset, null);
+            graphics.drawImage(image, origin.x + x + offsetX + paddingStart + imageX,
+                    origin.y + y + offsetY + paddingTop + imageY + offset, null);
         }
         else
         {
-            charRenderLines(graphics, lineWidth, new Point(origin.x + x + paddingStart,
-                    origin.y + y + paddingTop));
+            charRenderLines(graphics, lineWidth, new Point(origin.x + x + offsetX + paddingStart,
+                    origin.y + y + offsetY + paddingTop));
         }
     }
 

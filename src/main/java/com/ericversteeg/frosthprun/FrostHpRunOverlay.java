@@ -14,7 +14,7 @@ import java.awt.*;
 import java.io.InputStream;
 import java.util.List;
 
-class FrostHpRunOverlay extends RSViewOverlay {
+public class FrostHpRunOverlay extends RSViewOverlay {
 
 	private final Client client;
 	private final ItemManager itemManager;
@@ -103,15 +103,73 @@ class FrostHpRunOverlay extends RSViewOverlay {
 				bar.setValue(info.value);
 
 				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
+
 				if (i == types.size() - 2 && config.isLargeSecondary())
 				{
-					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, smallFont);
-					text.setLayoutGravity(RSViewGroup.Gravity.START);
+					text = new RSTextView(0, 0, RSView.WRAP_CONTENT, RSView.WRAP_CONTENT, secondaryFont);
+
+					switch (config.secondaryFontAlignment()) {
+						case LEFT:
+							text.setLayoutGravity(RSViewGroup.Gravity.START);
+							break;
+						case CENTER:
+							text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+							break;
+						case RIGHT:
+							text.setLayoutGravity(RSViewGroup.Gravity.END);
+							break;
+					}
+
+					int configOffsetX = config.secondaryTextOffsetX();
+					if (config.isNegativeSecondaryTextOffsetX())
+					{
+						configOffsetX = -configOffsetX;
+					}
+
+					text.setOffsetX(configOffsetX);
+
+					int configOffsetY = config.secondaryTextOffsetY();
+					if (config.isNegativeSecondaryTextOffsetY())
+					{
+						configOffsetY = -configOffsetY;
+					}
+
+					text.setOffsetY(-height / 4 + configOffsetY);
+				}
+				else {
+					text.setMarginStart(1);
+					//text.setMarginTop(-1);
+
+					int configOffsetX = config.smallTextOffsetX();
+					if (config.isNegativeSmallTextOffsetX())
+					{
+						configOffsetX = -configOffsetX;
+					}
+
+					text.setOffsetX(configOffsetX);
+
+					int configOffsetY = config.smallTextOffsetY();
+					if (config.isNegativeSmallTextOffsetY())
+					{
+						configOffsetY = -configOffsetY;
+					}
+
+					text.setOffsetY(-height / 3 + configOffsetY + 4);
+
+					switch (config.smallFontAlignment()) {
+						case LEFT:
+							text.setLayoutGravity(RSViewGroup.Gravity.START);
+							break;
+						case CENTER:
+							text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+							break;
+						case RIGHT:
+							text.setLayoutGravity(RSViewGroup.Gravity.END);
+							break;
+					}
 				}
 
 				text.setText(String.valueOf(bar.getValue()));
-				text.setMarginStart(1);
-				text.setMarginTop(-1);
 
 				container.addView(bar);
 
@@ -150,8 +208,35 @@ class FrostHpRunOverlay extends RSViewOverlay {
 				bar.setHue(info.hue);
 
 				text.setText(String.format("%d", bar.getValue()));
-				text.setLayoutGravity(RSViewGroup.Gravity.TOP);
-				text.setMarginTop(height / 8);
+				text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+
+				int configOffsetX = config.primaryTextOffsetX();
+				if (config.isNegativePrimaryTextOffsetX())
+				{
+					configOffsetX = -configOffsetX;
+				}
+
+				text.setOffsetX(configOffsetX);
+
+				int configOffsetY = config.primaryTextOffsetY();
+				if (config.isNegativePrimaryTextOffsetY())
+				{
+					configOffsetY = -configOffsetY;
+				}
+
+				text.setOffsetY(-height / 4 + configOffsetY);
+
+				switch (config.primaryFontAlignment()) {
+					case LEFT:
+						text.setLayoutGravity(RSViewGroup.Gravity.START);
+						break;
+					case CENTER:
+						text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+						break;
+					case RIGHT:
+						text.setLayoutGravity(RSViewGroup.Gravity.END);
+						break;
+				}
 
 				container.addView(bar);
 				if (config.hasPrimaryText())
@@ -196,28 +281,32 @@ class FrostHpRunOverlay extends RSViewOverlay {
 			{
 				if (i == types.size() - 2)
 				{
-					secondaryBar.setValue(info.value);
+					int value = info.value;
+					secondaryBar.setValue(Math.min(info.maxValue, value));
 					secondaryBar.setHue(info.hue);
-					secondaryTextView.setText(String.valueOf(secondaryBar.getValue()));
+					secondaryTextView.setText(String.valueOf(value));
 				}
 				else if (i == types.size() - 3)
 				{
-					tertiaryBar.setValue(info.value);
+					int value = info.value;
+					tertiaryBar.setValue(Math.min(info.maxValue, value));
 					tertiaryBar.setHue(info.hue);
-					tertiaryTextView.setText(String.valueOf(tertiaryBar.getValue()));
+					tertiaryTextView.setText(String.valueOf(value));
 				}
 				else if (i == types.size() - 4)
 				{
-					quaternaryBar.setValue(info.value);
+					int value = info.value;
+					quaternaryBar.setValue(Math.min(info.maxValue, value));
 					quaternaryBar.setHue(info.hue);
-					quaternaryTextView.setText(String.valueOf(quaternaryBar.getValue()));
+					quaternaryTextView.setText(String.valueOf(value));
 				}
 			}
 			else
 			{
-				primaryBar.setValue(info.value);
+				int value = info.value;
+				primaryBar.setValue(Math.min(info.maxValue, value));
 				primaryBar.setHue(info.hue);
-				primaryTextView.setText(String.valueOf(primaryBar.getValue()));
+				primaryTextView.setText(String.valueOf(value));
 			}
 		}
 	}
@@ -247,8 +336,51 @@ class FrostHpRunOverlay extends RSViewOverlay {
 		bar.setHue(info.hue);
 
 		text.setText(String.format("%d", bar.getValue()));
-		text.setLayoutGravity(RSViewGroup.Gravity.TOP);
-		text.setMarginTop(height / 8);
+		text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+
+		int configOffsetX = config.primaryTextOffsetX();
+		if (config.isNegativePrimaryTextOffsetX())
+		{
+			configOffsetX = -configOffsetX;
+		}
+
+		int runOffsetX = config.runBarTextOffsetX();
+		if (config.isNegativeRunTextOffsetX())
+		{
+			runOffsetX = -runOffsetX;
+		}
+
+		configOffsetX += runOffsetX;
+
+		text.setOffsetX(configOffsetX);
+
+		int configOffsetY = config.primaryTextOffsetY();
+		if (config.isNegativePrimaryTextOffsetY())
+		{
+			configOffsetY = -configOffsetY;
+		}
+
+		int runOffsetY = config.runBarTextOffsetY();
+		if (config.isNegativeRunTextOffsetY())
+		{
+			runOffsetY = -runOffsetY;
+		}
+
+		configOffsetY += runOffsetY;
+
+		text.setOffsetY(-height / 4 + configOffsetY + 1);
+
+		switch (config.primaryFontAlignment()) {
+			case LEFT:
+				text.setLayoutGravity(RSViewGroup.Gravity.START);
+				break;
+			case CENTER:
+				text.setLayoutGravity(RSViewGroup.Gravity.CENTER);
+				break;
+			case RIGHT:
+				text.setLayoutGravity(RSViewGroup.Gravity.END);
+				break;
+		}
 
 		container.addView(bar);
 
@@ -284,18 +416,23 @@ class FrostHpRunOverlay extends RSViewOverlay {
 		Map<BarType, BarInfo> barInfo = plugin.barInfo();
 		BarInfo info = barInfo.get(BarType.RUN_ENERGY);
 
-		runBar.setValue(info.value);
+		int value = info.value;
+		runBar.setValue(Math.min(info.maxValue, value));
 		runBar.setHue(info.hue);
-		runTextView.setText(String.valueOf(runBar.getValue()));
+		runTextView.setText(String.valueOf(value));
 	}
 
-	private void setFonts(int height)
+	void setFonts(int height)
 	{
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
+			InputStream inputStream = FrostHpRunOverlay.class.getResourceAsStream(
+					"NotoSansJP-" + config.primaryFontWeight().getName()
+							.replace(" ", "") + ".ttf"
+			);
+			System.out.println(inputStream);
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height * 0.55f));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height * 0.55f) * (config.primaryFontScaleFactor() / 100f));
 			ge.registerFont(font);
 			primaryFont = font;
 		}
@@ -306,9 +443,12 @@ class FrostHpRunOverlay extends RSViewOverlay {
 
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
+			InputStream inputStream = FrostHpRunOverlay.class.getResourceAsStream(
+					"NotoSansJP-" + config.secondaryFontWeight().getName()
+							.replace(" ", "") + ".ttf"
+			);
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 3));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 2) * (config.secondaryFontScaleFactor() / 100f));
 			ge.registerFont(font);
 			secondaryFont = font;
 		}
@@ -319,9 +459,12 @@ class FrostHpRunOverlay extends RSViewOverlay {
 
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			InputStream inputStream = FontManager.class.getResourceAsStream("runescape_bold.ttf");
+			InputStream inputStream = FrostHpRunOverlay.class.getResourceAsStream(
+					"NotoSansJP-" + config.smallFontWeight().getName()
+							.replace(" ", "") + ".ttf"
+			);
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 3));
+					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height / 3) * (config.smallFontScaleFactor() / 100f));
 			ge.registerFont(font);
 			smallFont = font;
 		}

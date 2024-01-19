@@ -1,10 +1,13 @@
 package com.ericversteeg.frosthprun.view;
 
+import com.ericversteeg.frosthprun.FrostHpRunOverlay;
 import net.runelite.api.Client;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 
+import java.io.InputStream;
 import java.util.*;
 import java.awt.*;
 import java.time.Instant;
