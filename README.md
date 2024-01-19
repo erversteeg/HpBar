@@ -1,10 +1,10 @@
-# Frost Hp & Run
+# Frost Hp And Run
 
-Hitpoints and run bar overlays.
+HP, prayer, special attack, and run bar HUD.
 
-## HP Bar 
+## Main Bar 
 
-![Screenshot 2024-01-19 132227](https://github.com/erversteeg/Frost-Hp-Run/assets/2341316/41f80d94-3005-47ef-84fd-e77ea3e3b463)
+![Screenshot 2024-01-19 132227](https://github.com/erversteeg/Frost-Hp-Run/assets/2341316/b1dfb881-6245-4a3b-986d-9e8db4ccdbc7)
 
 Hitpoints, prayer, run, and special attack.
 
