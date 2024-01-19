@@ -7,6 +7,8 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 
+import java.awt.*;
+
 @ConfigGroup(FrostHpRunConfig.GROUP)
 public interface FrostHpRunConfig extends Config
 {
@@ -408,6 +410,57 @@ public interface FrostHpRunConfig extends Config
 
     @ConfigSection(
             position = 3,
+            name = "Text Colors",
+            description = "Text colors."
+    )
+    String textColorsSection = "textColorsSection";
+
+    @ConfigItem(
+            position = 0,
+            keyName = "smallTextColor",
+            name = "Small Text Color",
+            description = "Configures thin bar text color.",
+            section = textColorsSection
+    )
+    default TextColor smallTextColor() {
+        return TextColor.WHITE;
+    }
+
+    @ConfigItem(
+            position = 1,
+            keyName = "secondaryTextColor",
+            name = "Secondary Text Color",
+            description = "Configures secondary bar text color.",
+            section = textColorsSection
+    )
+    default TextColor secondaryTextColor() {
+        return TextColor.WHITE;
+    }
+
+    @ConfigItem(
+            position = 2,
+            keyName = "primaryTextColor",
+            name = "Primary Text Color",
+            description = "Configures primary bar text color.",
+            section = textColorsSection
+    )
+    default TextColor primaryTextColor() {
+        return TextColor.WHITE;
+    }
+
+    @ConfigItem(
+            position = 3,
+            keyName = "runTextColor",
+            name = "Run Text Color",
+            description = "Configures run bar text color.",
+            section = textColorsSection
+    )
+    default TextColor runTextColor() {
+        return TextColor.WHITE;
+    }
+
+    @ConfigSection(
+            position = 4,
             name = "Additional Configuration",
             description = ""
     )

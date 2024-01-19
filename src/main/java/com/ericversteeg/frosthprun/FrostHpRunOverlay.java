@@ -135,6 +135,8 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 					}
 
 					text.setOffsetY(-height / 4 + configOffsetY);
+
+					text.setTextColor(config.secondaryTextColor().getColor());
 				}
 				else {
 					text.setMarginStart(1);
@@ -167,6 +169,8 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 							text.setLayoutGravity(RSViewGroup.Gravity.END);
 							break;
 					}
+
+					text.setTextColor(config.smallTextColor().getColor());
 				}
 
 				text.setText(String.valueOf(bar.getValue()));
@@ -237,6 +241,8 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 						text.setLayoutGravity(RSViewGroup.Gravity.END);
 						break;
 				}
+
+				text.setTextColor(config.primaryTextColor().getColor());
 
 				container.addView(bar);
 				if (config.hasPrimaryText())
@@ -409,6 +415,8 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 				text.setLayoutGravity(RSViewGroup.Gravity.END);
 				break;
 		}
+
+		text.setTextColor(config.runTextColor().getColor());
 
 		container.addView(bar);
 
