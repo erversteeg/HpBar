@@ -282,21 +282,42 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 				if (i == types.size() - 2)
 				{
 					int value = info.value;
-					secondaryBar.setValue(Math.min(info.maxValue, value));
+					if (config.extendBars())
+					{
+						secondaryBar.setValue(value);
+					}
+					else
+					{
+						secondaryBar.setValue(Math.min(info.maxValue, value));
+					}
 					secondaryBar.setHue(info.hue);
 					secondaryTextView.setText(String.valueOf(value));
 				}
 				else if (i == types.size() - 3)
 				{
 					int value = info.value;
-					tertiaryBar.setValue(Math.min(info.maxValue, value));
+					if (config.extendBars())
+					{
+						tertiaryBar.setValue(value);
+					}
+					else
+					{
+						tertiaryBar.setValue(Math.min(info.maxValue, value));
+					}
 					tertiaryBar.setHue(info.hue);
 					tertiaryTextView.setText(String.valueOf(value));
 				}
 				else if (i == types.size() - 4)
 				{
 					int value = info.value;
-					quaternaryBar.setValue(Math.min(info.maxValue, value));
+					if (config.extendBars())
+					{
+						quaternaryBar.setValue(value);
+					}
+					else
+					{
+						quaternaryBar.setValue(Math.min(info.maxValue, value));
+					}
 					quaternaryBar.setHue(info.hue);
 					quaternaryTextView.setText(String.valueOf(value));
 				}
@@ -304,7 +325,14 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 			else
 			{
 				int value = info.value;
-				primaryBar.setValue(Math.min(info.maxValue, value));
+				if (config.extendBars())
+				{
+					primaryBar.setValue(value);
+				}
+				else
+				{
+					primaryBar.setValue(Math.min(info.maxValue, value));
+				}
 				primaryBar.setHue(info.hue);
 				primaryTextView.setText(String.valueOf(value));
 			}
@@ -430,7 +458,6 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 					"NotoSansJP-" + config.primaryFontWeight().getName()
 							.replace(" ", "") + ".ttf"
 			);
-			System.out.println(inputStream);
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream)
 					.deriveFont(Font.PLAIN,  (int) Math.ceil((double) height * 0.55f) * (config.primaryFontScaleFactor() / 100f));
 			ge.registerFont(font);
