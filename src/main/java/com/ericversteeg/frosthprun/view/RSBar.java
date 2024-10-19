@@ -25,6 +25,9 @@ public class RSBar extends RSView {
     private float [] overlayStops = new float [] {0f, 1f};
     private Color [] overlayColors = new Color [] {overlayStart, overlayEnd};
 
+    private Color outerBorderColor = new Color(57, 41, 13, 200);
+    private Color innerBorderColor = new Color(147, 141, 130, 120);
+
     private float maxValue;
     private int value;
 
@@ -126,6 +129,15 @@ public class RSBar extends RSView {
         LinearGradientPaint gradientPaint = new LinearGradientPaint(origin.x + x, h, origin.x + x + w, h, overlayStops, overlayColors);
         graphics.setPaint(gradientPaint);
         graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
+
+        graphics.setColor(outerBorderColor);
+        graphics.drawRect(origin.x + x, origin.y + y, barSize, h);
+
+        graphics.setColor(outerBorderColor);
+        graphics.drawRect(origin.x + x - 1, origin.y - 1, barSize + 2, h + 2);
+
+        graphics.setColor(innerBorderColor);
+        graphics.drawRect(origin.x + x + 1, origin.y + 1, barSize - 2, h - 2);
     }
 
     private Color hueColor(Color color, float hue)
