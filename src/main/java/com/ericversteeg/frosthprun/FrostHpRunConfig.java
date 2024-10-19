@@ -413,7 +413,7 @@ public interface FrostHpRunConfig extends Config
             description = "Configures what hue run is (0-360).",
             section = huesSection
     )
-    default int runHue() { return 50; }
+    default int runHue() { return 60; }
 
     @ConfigItem(
             position = 12,
