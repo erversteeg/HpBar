@@ -1,6 +1,6 @@
 # Frost Bars
 
-Simple HP, Run energy, and Prayer bars with additional support for special attack charge. Supports up to 4 bars at the same time. Tracks ailments states as well (poisoned for example).
+Simple HP, Run energy, and Prayer bars with additional support for special attack charge. Tracks ailments states as well (poisoned for example).
 
 ![HpPrayerBar](https://github.com/user-attachments/assets/28585af8-c1eb-4d2c-ad0a-6ce85bee9bb0)
 
