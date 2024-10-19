@@ -2,6 +2,7 @@ package com.ericversteeg.frosthprun;
 
 import com.ericversteeg.frosthprun.config.BarInfo;
 import com.ericversteeg.frosthprun.config.BarStyle;
+import com.ericversteeg.frosthprun.config.TextBrightness;
 import com.ericversteeg.frosthprun.config.BarType;
 import com.ericversteeg.frosthprun.view.*;
 import net.runelite.api.*;
@@ -137,7 +138,16 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 
 					text.setOffsetY(-height / 4 + configOffsetY);
 
-					text.setTextColor(config.secondaryTextColor().getColor());
+					Color textColor = config.secondaryTextColor().getColor();
+					if (config.barTextStyle() == TextBrightness.DARKENED)
+					{
+						textColor = darkenColor(textColor);
+					}
+					else if (config.barTextStyle() == TextBrightness.NORMAL)
+					{
+						textColor = slightlyDarkenColor(textColor);
+					}
+					text.setTextColor(textColor);
 				}
 				else {
 					text.setMarginStart(1);
@@ -171,7 +181,16 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 							break;
 					}
 
-					text.setTextColor(config.smallTextColor().getColor());
+					Color textColor = config.smallTextColor().getColor();
+					if (config.barTextStyle() == TextBrightness.DARKENED)
+					{
+						textColor = darkenColor(textColor);
+					}
+					else if (config.barTextStyle() == TextBrightness.NORMAL)
+					{
+						textColor = slightlyDarkenColor(textColor);
+					}
+					text.setTextColor(textColor);
 				}
 
 				text.setText(String.valueOf(bar.getValue()));
@@ -248,7 +267,16 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 						break;
 				}
 
-				text.setTextColor(config.primaryTextColor().getColor());
+				Color textColor = config.primaryTextColor().getColor();
+				if (config.barTextStyle() == TextBrightness.DARKENED)
+				{
+					textColor = darkenColor(textColor);
+				}
+				else if (config.barTextStyle() == TextBrightness.NORMAL)
+				{
+					textColor = slightlyDarkenColor(textColor);
+				}
+				text.setTextColor(textColor);
 
 				container.addView(bar);
 				if (config.hasPrimaryText())
@@ -422,7 +450,16 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 				break;
 		}
 
-		text.setTextColor(config.runTextColor().getColor());
+		Color textColor = config.runTextColor().getColor();
+		if (config.barTextStyle() == TextBrightness.DARKENED)
+		{
+			textColor = darkenColor(textColor);
+		}
+		else if (config.barTextStyle() == TextBrightness.NORMAL)
+		{
+			textColor = slightlyDarkenColor(textColor);
+		}
+		text.setTextColor(textColor);
 
 		container.addView(bar);
 
@@ -664,5 +701,17 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 	{
 		removeViewInfo(runViewName, true);
 		isFadeOutRun = false;
+	}
+
+	private Color slightlyDarkenColor(Color color)
+	{
+		float [] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		return Color.getHSBColor(hsb[0], hsb[1], hsb[2] * 0.8f);
+	}
+
+	private Color darkenColor(Color color)
+	{
+		float [] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+		return Color.getHSBColor(hsb[0], hsb[1], hsb[2] * 0.6f);
 	}
 }

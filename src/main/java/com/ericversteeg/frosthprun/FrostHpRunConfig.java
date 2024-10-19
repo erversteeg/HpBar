@@ -1,14 +1,13 @@
 package com.ericversteeg.frosthprun;
 
 import com.ericversteeg.frosthprun.config.BarStyle;
+import com.ericversteeg.frosthprun.config.TextBrightness;
 import com.ericversteeg.frosthprun.config.BarType;
 import com.ericversteeg.frosthprun.view.RSAnchorType;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
-
-import java.awt.*;
 
 @ConfigGroup(FrostHpRunConfig.GROUP)
 public interface FrostHpRunConfig extends Config
@@ -19,7 +18,15 @@ public interface FrostHpRunConfig extends Config
             name = "Bar Style",
             description = "Configures the bar style."
     )
-    default BarStyle barStyle() { return BarStyle.FLAT; }
+    default BarStyle barStyle() { return BarStyle.DARK; }
+
+    @ConfigItem(
+            position = -1,
+            keyName = "textStyle",
+            name = "Bar Text Style",
+            description = "Configures the bar text brightness."
+    )
+    default TextBrightness barTextStyle() { return TextBrightness.NORMAL; }
 
     String GROUP = "hpbar";
 
