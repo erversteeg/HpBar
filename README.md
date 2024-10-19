@@ -1,24 +1,19 @@
-# Frost Hp And Run
+# Frost Bars
 
-HP, prayer, special attack, and run bar HUD.
+Simple HP, Run energy, and Prayer bars with additional support for special attack charge. Supports up to 4 bars at the same time. Tracks ailments states as well (poisoned for example).
 
-## Main Bar 
+![HpPrayerBar](https://github.com/user-attachments/assets/28585af8-c1eb-4d2c-ad0a-6ce85bee9bb0)
 
-![Screenshot 2024-01-19 132227](https://github.com/erversteeg/Frost-Hp-Run/assets/2341316/b1dfb881-6245-4a3b-986d-9e8db4ccdbc7)
+![RunBar](https://github.com/user-attachments/assets/d831e529-bab7-4b1f-bc03-9e3a65a165a2)
 
-Hitpoints, prayer, run, and special attack.
+## Smart Hide
 
-## Run Bar
+Enable "Smart Hide" and the bars will automiatcally show / hide based off your combat state.
 
-![Screenshot 2024-01-19 132445](https://github.com/erversteeg/Frost-Hp-Run/assets/2341316/2973bf81-144f-4f3d-aae2-a29d528094e6)
+## Configuration
 
-Shows stamina buff when active.
+Frost bars runs off the default Runelite Panel packages so if you need to configure positions you can in plugin settings. Anchor, x, and y are those settings.
 
-### Configurable
-- Enable
-- Always on
-- Order
-- Size
-- Color
-- Location
-- Opacity
+## Styles
+
+Brighten the bars and text or make them round in plugin settings.
