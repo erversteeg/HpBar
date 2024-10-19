@@ -22,8 +22,8 @@ import java.time.Instant;
 import java.util.*;
 
 @PluginDescriptor(
-	name = "Frost HP And Run",
-	description = "HP, prayer, special attack, and run bar HUD."
+	name = "Frost Bars",
+	description = "Simple HP and run bars."
 )
 
 public class FrostHpRunPlugin extends Plugin
