@@ -84,12 +84,12 @@ public interface FrostHpRunConfig extends Config
 
     @ConfigItem(
             position = 14,
-            keyName = "alwaysVisible",
-            name = "Always On",
-            description = "Configures whether or not bars are always on.",
+            keyName = "smartHide",
+            name = "Smart Hide",
+            description = "Configures whether or not smart hide is enabled.",
             section = hpBarSection
     )
-    default boolean isAlwaysVisible() { return true; }
+    default boolean isSmartHide() { return false; }
 
     @ConfigItem(
             position = 15,
@@ -220,12 +220,12 @@ public interface FrostHpRunConfig extends Config
 
     @ConfigItem(
             position = 15,
-            keyName = "runAlwaysVisible",
-            name = "Always On",
-            description = "Configures whether or not bar is always on.",
+            keyName = "runSmartHide",
+            name = "Smart Hide",
+            description = "Configures whether or not smart hide is enabled.",
             section = runBarSection
     )
-    default boolean isRunAlwaysVisible() { return true; }
+    default boolean isRunSmartHide() { return false; }
 
     @ConfigItem(
             position = 15,

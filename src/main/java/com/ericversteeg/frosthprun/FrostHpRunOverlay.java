@@ -558,12 +558,12 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (config.isAlwaysVisible() && config.showHpBar() && !containsViewInfo(hpViewName))
+		if (!config.isSmartHide() && config.showHpBar() && !containsViewInfo(hpViewName))
 		{
 			//System.out.println("Always visible, view info not there, setup hp bar, fade in false");
 			setupHpBar(false);
 		}
-		else if (config.isAlwaysVisible() && config.showHpBar())
+		else if (!config.isSmartHide() && config.showHpBar())
 		{
 			//System.out.println("Always visible, update hp bar");
 			updateHpBar();
@@ -601,12 +601,12 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 			}
 		}
 
-		if (config.isRunAlwaysVisible() && config.showRunBar() && !containsViewInfo(runViewName))
+		if (!config.isRunSmartHide() && config.showRunBar() && !containsViewInfo(runViewName))
 		{
 			//System.out.println("Always visible, view info not there, setup run bar, fade in false");
 			setupRunBar(false);
 		}
-		else if (config.isRunAlwaysVisible() && config.showRunBar())
+		else if (!config.isRunSmartHide() && config.showRunBar())
 		{
 			//System.out.println("Always visible, update run bar");
 			updateRunBar();
