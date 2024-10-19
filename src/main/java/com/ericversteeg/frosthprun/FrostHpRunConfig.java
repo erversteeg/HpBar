@@ -1,5 +1,6 @@
 package com.ericversteeg.frosthprun;
 
+import com.ericversteeg.frosthprun.config.BarStyle;
 import com.ericversteeg.frosthprun.config.BarType;
 import com.ericversteeg.frosthprun.view.RSAnchorType;
 import net.runelite.client.config.Config;
@@ -12,6 +13,14 @@ import java.awt.*;
 @ConfigGroup(FrostHpRunConfig.GROUP)
 public interface FrostHpRunConfig extends Config
 {
+    @ConfigItem(
+            position = -1,
+            keyName = "style",
+            name = "Bar Style",
+            description = "Configures the bar style."
+    )
+    default BarStyle barStyle() { return BarStyle.FLAT; }
+
     String GROUP = "hpbar";
 
     @ConfigSection(

@@ -1,6 +1,7 @@
 package com.ericversteeg.frosthprun;
 
 import com.ericversteeg.frosthprun.config.BarInfo;
+import com.ericversteeg.frosthprun.config.BarStyle;
 import com.ericversteeg.frosthprun.config.BarType;
 import com.ericversteeg.frosthprun.view.*;
 import net.runelite.api.*;
@@ -98,7 +99,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 					container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 2);
 				}
 
-				RSBar bar = new RSBar(RSView.MATCH_PARENT, RSView.MATCH_PARENT, info.maxValue);
+                RSBar bar = new RSBar(RSView.MATCH_PARENT, RSView.MATCH_PARENT, info.maxValue, config.barStyle());
 				bar.setHue(info.hue);
 				bar.setValue(info.value);
 
@@ -204,7 +205,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 			{
 				RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
 
-				RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue);
+				RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle());
 				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT,
 						RSView.WRAP_CONTENT, primaryFont);
 
@@ -228,7 +229,12 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 					configOffsetY = -configOffsetY;
 				}
 
-				text.setOffsetY(-height / 4 + configOffsetY);
+				int textOffsetY = -height / 4 + configOffsetY;
+				if (config.barStyle() != BarStyle.ROUND)
+				{
+					textOffsetY += height / 16;
+				}
+				text.setOffsetY(textOffsetY);
 
 				switch (config.primaryFontAlignment()) {
 					case LEFT:
@@ -362,7 +368,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 
 		RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
 
-		RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue);
+		RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle());
 		RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT,
 				RSView.WRAP_CONTENT, primaryFont);
 

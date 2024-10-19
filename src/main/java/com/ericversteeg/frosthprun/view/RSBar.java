@@ -1,5 +1,7 @@
 package com.ericversteeg.frosthprun.view;
 
+import com.ericversteeg.frosthprun.config.BarStyle;
+
 import java.awt.*;
 
 public class RSBar extends RSView {
@@ -26,10 +28,13 @@ public class RSBar extends RSView {
     private float maxValue;
     private int value;
 
-    public RSBar(int w, int h, int maxValue) {
+    private BarStyle barStyle;
+
+    public RSBar(int w, int h, int maxValue, BarStyle barStyle) {
         super(0, 0, w, h);
 
         this.maxValue = maxValue;
+        this.barStyle = barStyle;
     }
 
     public int getValue()
@@ -91,9 +96,20 @@ public class RSBar extends RSView {
 
         graphics.fillRect(origin.x + x, origin.y + y, w, h);
 
-        LinearGradientPaint gradientPaint = new LinearGradientPaint(origin.x + x, origin.y + y,
-                origin.x + x, origin.y + y + h, stops, colors);
-        graphics.setPaint(gradientPaint);
+        if (barStyle == BarStyle.ROUND)
+        {
+            LinearGradientPaint gradientPaint = new LinearGradientPaint(origin.x + x, origin.y + y,
+                    origin.x + x, origin.y + y + h, stops, colors);
+            graphics.setPaint(gradientPaint);
+        }
+        else if (barStyle == BarStyle.FLAT)
+        {
+            graphics.setColor(topColorInner);
+        }
+        else
+        {
+            graphics.setColor(darkColor);
+        }
 
         int barSize = (int) (w * (value / maxValue));
         RSAnimation animation = animations.get(RSAnimation.Type.INTERPOLATE);
@@ -107,7 +123,7 @@ public class RSBar extends RSView {
 
         graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
 
-        gradientPaint = new LinearGradientPaint(origin.x + x, h, origin.x + x + w, h, overlayStops, overlayColors);
+        LinearGradientPaint gradientPaint = new LinearGradientPaint(origin.x + x, h, origin.x + x + w, h, overlayStops, overlayColors);
         graphics.setPaint(gradientPaint);
         graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
     }
