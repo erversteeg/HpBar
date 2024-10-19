@@ -62,7 +62,7 @@ public interface FrostHpRunConfig extends Config
             description = "Configures what the tertiary bar is.",
             section = hpBarSection
     )
-    default BarType tertiaryBarType() { return BarType.SPECIAL_ATTACK; }
+    default BarType tertiaryBarType() { return BarType.NONE; }
 
     @ConfigItem(
             position = 3,
@@ -71,7 +71,7 @@ public interface FrostHpRunConfig extends Config
             description = "Configures what the quaternary bar is.",
             section = hpBarSection
     )
-    default BarType quaternaryBarType() { return BarType.RUN_ENERGY; }
+    default BarType quaternaryBarType() { return BarType.NONE; }
 
     @ConfigItem(
             position = 13,
@@ -145,7 +145,7 @@ public interface FrostHpRunConfig extends Config
             description = "Configures whether or not to show small text.",
             section = hpBarSection
     )
-    default boolean hasSecondaryText() { return true; }
+    default boolean hasSecondaryText() { return false; }
 
     @ConfigItem(
             position = 21,
@@ -155,7 +155,7 @@ public interface FrostHpRunConfig extends Config
             section = hpBarSection
     )
     default RSAnchorType anchorType() {
-        return RSAnchorType.TOP_CENTER;
+        return RSAnchorType.BOTTOM_CENTER;
     }
 
     @ConfigItem(
@@ -177,7 +177,7 @@ public interface FrostHpRunConfig extends Config
             section = hpBarSection
     )
     default int anchorY() {
-        return 100;
+        return 180;
     }
 
     @ConfigItem(
@@ -289,7 +289,7 @@ public interface FrostHpRunConfig extends Config
             section = runBarSection
     )
     default RSAnchorType runAnchorType() {
-        return RSAnchorType.TOP_CENTER;
+        return RSAnchorType.BOTTOM_CENTER;
     }
 
     @ConfigItem(
@@ -311,7 +311,7 @@ public interface FrostHpRunConfig extends Config
             section = runBarSection
     )
     default int runAnchorY() {
-        return 180;
+        return 230;
     }
 
     @ConfigItem(
@@ -322,7 +322,7 @@ public interface FrostHpRunConfig extends Config
             section = runBarSection
     )
     default int runWidth() {
-        return 218;
+        return 180;
     }
 
     @ConfigItem(
