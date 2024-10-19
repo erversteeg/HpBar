@@ -26,7 +26,7 @@ public interface FrostHpRunConfig extends Config
             name = "Bar Text Style",
             description = "Configures the bar text brightness."
     )
-    default TextBrightness barTextStyle() { return TextBrightness.NORMAL; }
+    default TextBrightness barTextStyle() { return TextBrightness.DARKENED; }
 
     String GROUP = "hpbar";
 
@@ -188,7 +188,7 @@ public interface FrostHpRunConfig extends Config
             section = hpBarSection
     )
     default int width() {
-        return 218;
+        return 180;
     }
 
     @ConfigItem(
@@ -556,7 +556,7 @@ public interface FrostHpRunConfig extends Config
             section = additionalConfigSection
     )
     default int secondaryTextOffsetY() {
-        return 0;
+        return 3;
     }
 
     @ConfigItem(
