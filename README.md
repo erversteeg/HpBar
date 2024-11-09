@@ -2,9 +2,9 @@
 
 Simple HP, Run energy, and Prayer bars with additional support for special attack charge. Supports multiple bars. Tracks ailments states as well (poisoned for example).
 
-![HpPrayerBar](https://github.com/user-attachments/assets/28585af8-c1eb-4d2c-ad0a-6ce85bee9bb0)
+![HPBar](https://github.com/user-attachments/assets/acdc06a0-4ef5-4fce-ba90-e470d11eaf83)
 
-![RunBar](https://github.com/user-attachments/assets/d831e529-bab7-4b1f-bc03-9e3a65a165a2)
+![RunBar](https://github.com/user-attachments/assets/55ffd622-6a5b-4729-b5a1-b84d53c5418f)
 
 ## Smart Hide
 
