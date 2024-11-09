@@ -266,7 +266,7 @@ public class FrostHpRunPlugin extends Plugin
 
 	public boolean isRun()
 	{
-		long delay = 1800L;
+		long delay = 2400L;
 		if (fromRunIncrease)
 		{
 			delay = 3600L;
