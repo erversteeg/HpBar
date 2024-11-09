@@ -32,12 +32,17 @@ public class RSBar extends RSView {
     private int value;
 
     private BarStyle barStyle;
+    private int index;
+    private int groupSize;
 
-    public RSBar(int w, int h, int maxValue, BarStyle barStyle) {
+    public RSBar(int w, int h, int maxValue, BarStyle barStyle, int index, int groupSize)
+    {
         super(0, 0, w, h);
 
         this.maxValue = maxValue;
         this.barStyle = barStyle;
+        this.index = index;
+        this.groupSize = groupSize;
     }
 
     public int getValue()
@@ -96,8 +101,8 @@ public class RSBar extends RSView {
         };
 
         graphics.setPaint(colorWithOpacity(new Color(0, 0, 0, 156)));
-
-        graphics.fillRect(origin.x + x, origin.y + y, w, h);
+        graphics.fillRect(origin.x, origin.y, w, h);
+        //graphics.fillRect(origin.x + x - 1, origin.y - 1, w + 2, h + 2);
 
         if (barStyle == BarStyle.ROUND)
         {
@@ -131,13 +136,31 @@ public class RSBar extends RSView {
         graphics.fillRect(origin.x + x, origin.y + y, barSize, h);
 
         graphics.setColor(outerBorderColor);
-        graphics.drawRect(origin.x + x, origin.y + y, barSize, h);
+        if (index == 0)
+        {
+            //graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x + barSize + 1, origin.y + y - 1);
+            graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x + barSize, origin.y + y - 1);
+        }
+        if (index == groupSize - 1)
+        {
+            graphics.drawLine(origin.x + x - 1, origin.y + y + h + 1, origin.x + x + barSize, origin.y + y + h + 1);
+            graphics.drawLine(origin.x + x - 1, origin.y + y + h, origin.x + x + barSize, origin.y + y + h);
+        }
 
-        graphics.setColor(outerBorderColor);
-        graphics.drawRect(origin.x + x - 1, origin.y - 1, barSize + 2, h + 2);
+        graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x - 1, origin.y + y + h + 1);
+        //graphics.drawLine(origin.x + x, origin.y + y - 1, origin.x + x, origin.y + y + h + 1);
+
+        //graphics.drawLine(origin.x + x + barSize + 1, origin.y + y - 1, origin.x + x + barSize + 1, origin.y + y + h + 1);
+        graphics.drawLine(origin.x + x + barSize, origin.y + y, origin.x + x + barSize, origin.y + y + h + 1);
 
         graphics.setColor(innerBorderColor);
-        graphics.drawRect(origin.x + x + 1, origin.y + 1, barSize - 2, h - 2);
+        graphics.drawLine(origin.x + x, origin.y + y, origin.x + x + barSize - 1, origin.y + y);
+        if (index == groupSize - 1)
+        {
+            graphics.drawLine(origin.x + x, origin.y + y + h, origin.x + x + barSize - 1, origin.y + y + h);
+        }
+        graphics.drawLine(origin.x + x, origin.y + y + 1, origin.x + x, origin.y + y + h - 1);
+        graphics.drawLine(origin.x + x + barSize - 1, origin.y + y + 1, origin.x + x + barSize - 1, origin.y + y + h - 1);
     }
 
     private Color hueColor(Color color, float hue)

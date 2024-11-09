@@ -100,7 +100,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 					container = new RSBox(0, 0, RSView.MATCH_PARENT, height / 2);
 				}
 
-                RSBar bar = new RSBar(RSView.MATCH_PARENT, RSView.MATCH_PARENT, info.maxValue, config.barStyle());
+                RSBar bar = new RSBar(RSView.MATCH_PARENT, RSView.MATCH_PARENT, info.maxValue, config.barStyle(), i, types.size());
 				bar.setHue(info.hue);
 				bar.setValue(info.value);
 
@@ -224,7 +224,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 			{
 				RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
 
-				RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle());
+				RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle(), i, types.size());
 				RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT,
 						RSView.WRAP_CONTENT, primaryFont);
 
@@ -291,7 +291,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 			}
 		}
 
-		hpColumn.setRenderReverse(true);
+		hpColumn.setRenderReverse(false);
 
 		hpColumn.setOpacity(Math.max(20, Math.min(100,
 				config.barOpacity())) / 100f);
@@ -396,7 +396,7 @@ public class FrostHpRunOverlay extends RSViewOverlay {
 
 		RSBox container = new RSBox(0, 0, RSView.MATCH_PARENT, height);
 
-		RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle());
+		RSBar bar = new RSBar(RSView.MATCH_PARENT, height, info.maxValue, config.barStyle(), 0, 1);
 		RSTextView text = new RSTextView(0, 0, RSView.WRAP_CONTENT,
 				RSView.WRAP_CONTENT, primaryFont);
 
