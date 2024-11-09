@@ -138,20 +138,21 @@ public class RSBar extends RSView {
         graphics.setColor(outerBorderColor);
         if (index == 0)
         {
-            //graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x + barSize + 1, origin.y + y - 1);
-            graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x + barSize, origin.y + y - 1);
+            graphics.drawLine(origin.x + x - 2, origin.y + y - 2, origin.x + x + barSize + 1, origin.y + y - 2);
+            graphics.drawLine(origin.x + x - 2, origin.y + y - 1, origin.x + x + barSize + 1, origin.y + y - 1);
         }
         if (index == groupSize - 1)
         {
-            graphics.drawLine(origin.x + x - 1, origin.y + y + h + 1, origin.x + x + barSize, origin.y + y + h + 1);
-            graphics.drawLine(origin.x + x - 1, origin.y + y + h, origin.x + x + barSize, origin.y + y + h);
+            graphics.drawLine(origin.x + x - 2, origin.y + y + h, origin.x + x + barSize + 1, origin.y + y + h);
+            graphics.drawLine(origin.x + x - 2, origin.y + y + h + 1, origin.x + x + barSize + 1, origin.y + y + h + 1);
+            graphics.drawLine(origin.x + x - 2, origin.y + y + h + 2, origin.x + x + barSize + 1, origin.y + y + h + 2);
         }
 
-        graphics.drawLine(origin.x + x - 1, origin.y + y - 1, origin.x + x - 1, origin.y + y + h + 1);
-        //graphics.drawLine(origin.x + x, origin.y + y - 1, origin.x + x, origin.y + y + h + 1);
+        graphics.drawLine(origin.x + x - 2, origin.y + y, origin.x + x - 2, origin.y + y + h - 1);
+        graphics.drawLine(origin.x + x - 1, origin.y + y, origin.x + x - 1, origin.y + y + h - 1);
 
-        //graphics.drawLine(origin.x + x + barSize + 1, origin.y + y - 1, origin.x + x + barSize + 1, origin.y + y + h + 1);
-        graphics.drawLine(origin.x + x + barSize, origin.y + y, origin.x + x + barSize, origin.y + y + h + 1);
+        graphics.drawLine(origin.x + x + barSize, origin.y + y, origin.x + x + barSize, origin.y + y + h - 1);
+        graphics.drawLine(origin.x + x + barSize + 1, origin.y + y, origin.x + x + barSize + 1, origin.y + y + h - 1);
 
         graphics.setColor(innerBorderColor);
         graphics.drawLine(origin.x + x, origin.y + y, origin.x + x + barSize - 1, origin.y + y);
